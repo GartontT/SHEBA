@@ -13,12 +13,19 @@ A = ellip[0]*cos(ellip[4])*m
 Ap= ellip[0]*sin(ellip[4])
 B = ellip[1]*sin(ellip[4])*m
 Bp= ellip[1]*cos(ellip[4])
-inter_ang = atan((A-ap)/(b-bp))  ;this is valid when Yc = y0
+inter_ang0 = atan((A-ap),(b-bp))  ;this is valid when Yc = y0
 ; ie, the CME starts on the sun which is the center of the ellipse
 
 plot,earth.orbit.orbit_x,earth.orbit.orbit_y,psym=4
 oplot,[0,xf],[0,yf]
+inter_ang = [0,!pi] + inter_ang0 - ellip[4]
+diff=min(abs(abs(cme_lon*!pi/180.)-abs(inter_ang)),which)
+inter_angHGI=inter_ang[which]
+
+inter_ang=(which eq 1)?!pi+inter_ang0:inter_ang0
+
 print,inter_ang,' radians = ', inter_ang*180./!pi,' degrees'
+print,inter_ang+earth.param[4],' radians = ', (inter_ang+earth.param[4])*180./!pi,' degrees'
 
 stop
 
@@ -30,7 +37,7 @@ planet_pos={name:'earth',numb:3,time:t_sol,lat:0.,lon:0.,rad:0.};
  planet_pos.lat = hel_lat
  planet_pos.lon = hel_lon
  planet_pos.rad = hel_rad * 150e6
-
+ 
 
 ;1.- time to get at radius of planet at t_sol:
 cme_t = planet_pos.rad / cme_vel

@@ -1,3 +1,28 @@
+function plot_orbit,planet,over=over,orbit=orbit,points=points,zero=zero,coord=coord,ninety=ninety,_extra=_extra
+
+; check planet is a valid structure
+; check other variables
+
+plot_command =(~keyword_set(over))?'plot,xrange=xrange,yrange=yrange':'oplot'
+
+if keyword_set(orbit) then begin
+;plot ellipse
+   plot_ellips,planet.param,_extra=_extra
+   plot_command = 'oplot'
+endif
+if keyword_set(points) then begin
+   xm=planet.orbit.orbit_x
+   ym=planet.orbit.orbit_y
+   a=execute(plot_command+',xm,ym,_extra=_extra')
+   if keyword_set(coord) then for i=0,n_elements(xm)-1 do xyouts,xm[i]+0.01,ym[i]+0.01,planet.orbit.lon[i]
+   plot_command = 'oplot'
+endif
+;
+
+
+return,1
+end
+
 function planet_orbit,date,planet_n,planet=planet
 
 
