@@ -41,13 +41,16 @@ jd = jd_date - (fix(n_steps/2)*step_size)
 values = fltarr(n_steps)
 planet_steps = {date:strarr(n_steps),radio:values,lon:values,lat:values,orbit_x: values, orbit_y: values}
 
+year = (strsplit(anytim(date,/ecs),'/',/extract))[0]
+long_asc_node = 74+(22.+((year-1900)*.84))/60.
+
 for i=0,n_steps-1 do begin
    helio, jd, planet_n, hel_rad, hel_lon, hel_lat
    planet_steps.radio[i]=hel_rad
-   planet_steps.lon[i]=hel_lon
+   planet_steps.lon[i]=hel_lon - long_asc_node
    planet_steps.lat[i]=hel_lat
    planet_steps.date[i] = jd2ecs(jd)
-   polrec,hel_rad,hel_lon,dx,dy,/degrees
+   polrec,hel_rad,hel_lon - long_asc_node,dx,dy,/degrees
    planet_steps.orbit_x[i] = dx
    planet_steps.orbit_y[i] = dy
 

@@ -1,0 +1,4 @@
+13/Sept  10:50
+It's a month since I haven't touched these files.  Let's see what I remember.  The files are:
+CME_prop.pro -> as far as I remember this is the first attempt, where I tried to match the ellipse and line, but having the sun on the center, not on the focus.
+intersect_ellipline.pro -> find the intersection for a ellips and a line whichever orientation they have.

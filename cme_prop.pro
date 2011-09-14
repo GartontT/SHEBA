@@ -1,4 +1,5 @@
-pro cme_prop,x_sol=x_sol,t_sol=t_sol,cme_vel=cme_vel,dlong=dlong
+pro cme_prop,planetn=planetn,x_sol=x_sol,t_sol=t_sol,cme_vel=cme_vel,dlong=dlong
+if ~keyword_set(planetn) then planetn = 3
 if ~keyword_set(t_sol) then t_sol = systim()
 if ~keyword_set(cme_vel) then cme_vel=800 ;km/s
 if ~keyword_set(x_sol) then x_sol=[0,0]; lon-lat HGI
@@ -8,12 +9,12 @@ cme_lon = long_hgihg(x_sol[0],/hg,date=t_sol) ;degrees
 print,cme_lon
 ;===================================================================
 ;====================  Find where the CME intersect the planet orbit
-ellip = planet_orbit(t_sol,3,planet=earth)
+ellip = planet_orbit(t_sol,planetn,planet=planet)
 inter = intersect_ellipline(ellip,[tan(cme_lon * !DtoR),0],angle=cme_lon,/plot)
 ;inter_a = intersect_ellipline(ellip,[tan(cme_lon+dlong/2 * !DtoR),0],angle=cme_lon+dlong/2,/plot)
 ;inter_b = intersect_ellipline(ellip,[tan(cme_lon-dlong/2 * !DtoR),0],angle=cme_lon-dlong/2,/plot)
   ; and plot it
-  plot,earth.orbit.orbit_x,earth.orbit.orbit_y,psym=4
+  plot,planet.orbit.orbit_x,planet.orbit.orbit_y,psym=4
   oplot,[0,inter[0]],[0,inter[1]]
 
 ;===================================================================
@@ -28,7 +29,7 @@ cme_t1 = anytim(anytim(t_sol)+cme_t,/ecs)           ; Starting_time + travel_tim
 ;================ Calculate position of planet at the time of impact
 jd_struct = anytim2jd(cme_t1)
 jd = jd_struct.int + jd_struct.frac
-helio, jd, earth.n, planet_t1_rad, planet_t1_lon, planet_t1_lat
+helio, jd, planet.n, planet_t1_rad, planet_t1_lon, planet_t1_lat
 year = (strsplit(anytim(cme_t1,/ecs),'/',/extract))[0]
 long_asc_node = 74+(22.+((year-1900)*.84))/60.
 planet_t1_lon = planet_t1_lon - long_asc_node 
@@ -50,58 +51,59 @@ if (planet_t1_lon le cme_lon+dlong/2) and (planet_t1_lon ge cme_lon-dlong/2) the
   polrec,rad,ang+dlong/2,xx,yy,/degrees
   oplot,[0,xx],[0,yy],linestyle=2
 
+end
+;; stop
 
-stop
+;; polrec,2*max(planet.orbit.radio),cme_lon,xf,yf,/degrees
+;; m = yf/xf
+;; A = ellip[0]*cos(ellip[4])*m
+;; Ap= ellip[0]*sin(ellip[4])
+;; B = ellip[1]*sin(ellip[4])*m
+;; Bp= ellip[1]*cos(ellip[4])
+;; inter_ang0 = atan((A-ap),(b-bp))  ;this is valid when Yc = y0
+;; ; ie, the CME starts on the sun which is the center of the ellipse
 
-polrec,2*max(earth.orbit.radio),cme_lon,xf,yf,/degrees
-m = yf/xf
-A = ellip[0]*cos(ellip[4])*m
-Ap= ellip[0]*sin(ellip[4])
-B = ellip[1]*sin(ellip[4])*m
-Bp= ellip[1]*cos(ellip[4])
-inter_ang0 = atan((A-ap),(b-bp))  ;this is valid when Yc = y0
-; ie, the CME starts on the sun which is the center of the ellipse
+;; plot,planet.orbit.orbit_x,planet.orbit.orbit_y,psym=4
+;; oplot,[0,xf],[0,yf]
+;; inter_ang = [0,!pi] + inter_ang0 - ellip[4]
+;; diff=min(abs(abs(cme_lon*!pi/180.)-abs(inter_ang)),which)
+;; inter_angHGI=inter_ang[which]
 
-plot,earth.orbit.orbit_x,earth.orbit.orbit_y,psym=4
-oplot,[0,xf],[0,yf]
-inter_ang = [0,!pi] + inter_ang0 - ellip[4]
-diff=min(abs(abs(cme_lon*!pi/180.)-abs(inter_ang)),which)
-inter_angHGI=inter_ang[which]
+;; inter_ang=(which eq 1)?!pi+inter_ang0:inter_ang0
 
-inter_ang=(which eq 1)?!pi+inter_ang0:inter_ang0
+;; print,inter_ang,' radians = ', inter_ang*180./!pi,' degrees'
+;; print,inter_ang+planet.param[4],' radians = ', (inter_ang+planet.param[4])*180./!pi,' degrees'
 
-print,inter_ang,' radians = ', inter_ang*180./!pi,' degrees'
-print,inter_ang+earth.param[4],' radians = ', (inter_ang+earth.param[4])*180./!pi,' degrees'
-
-stop
+;; end
+;; stop
 
 
-planet_pos={name:'earth',numb:3,time:t_sol,lat:0.,lon:0.,rad:0.}; 
- jd_struct = anytim2jd(t_sol)
- jd = jd_struct.int + jd_struct.frac
- helio, jd, planet_pos.numb, hel_rad, hel_lon, hel_lat
- planet_pos.lat = hel_lat
- planet_pos.lon = hel_lon
- planet_pos.rad = hel_rad * 150e6
+;; planet_pos={name:'earth',numb:3,time:t_sol,lat:0.,lon:0.,rad:0.}; 
+;;  jd_struct = anytim2jd(t_sol)
+;;  jd = jd_struct.int + jd_struct.frac
+;;  helio, jd, planet_pos.numb, hel_rad, hel_lon, hel_lat
+;;  planet_pos.lat = hel_lat
+;;  planet_pos.lon = hel_lon
+;;  planet_pos.rad = hel_rad * 150e6
  
 
-;1.- time to get at radius of planet at t_sol:
-cme_t = planet_pos.rad / cme_vel
-cme_t1 = anytim(anytim(t_sol)+cme_t,/ecs)
-;2.- Update planet pos for t1
-planet_post1=planet_pos
- jd_struct = anytim2jd(cme_t1)
- jd = jd_struct.int + jd_struct.frac
- helio, jd, planet_pos.numb, hel_rad, hel_lon, hel_lat
- planet_post1.lat = hel_lat
- planet_post1.lon = hel_lon
- planet_post1.rad = hel_rad * 150e6
- planet_post1.time = cme_t1
+;; ;1.- time to get at radius of planet at t_sol:
+;; cme_t = planet_pos.rad / cme_vel
+;; cme_t1 = anytim(anytim(t_sol)+cme_t,/ecs)
+;; ;2.- Update planet pos for t1
+;; planet_post1=planet_pos
+;;  jd_struct = anytim2jd(cme_t1)
+;;  jd = jd_struct.int + jd_struct.frac
+;;  helio, jd, planet_pos.numb, hel_rad, hel_lon, hel_lat
+;;  planet_post1.lat = hel_lat
+;;  planet_post1.lon = hel_lon
+;;  planet_post1.rad = hel_rad * 150e6
+;;  planet_post1.time = cme_t1
 
-;3.- Is planet in cme range? long_cme + dlong?
-print,((abs(planet_pos.rad - planet_post1.rad) lt 1e5) and (abs(planet_post1.lon - x_sol[0]) lt dlong))?'Hit':'Missed'
+;; ;3.- Is planet in cme range? long_cme + dlong?
+;; print,((abs(planet_pos.rad - planet_post1.rad) lt 1e5) and (abs(planet_post1.lon - x_sol[0]) lt dlong))?'Hit':'Missed'
 
-;plot,[0, ],[0,]
+;; ;plot,[0, ],[0,]
 
-stop
-end
+;; stop
+;; end

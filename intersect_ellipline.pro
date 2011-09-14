@@ -1,12 +1,15 @@
-pro intersect_ellipline,ellip,line,plot=plot,_extra=_extra
+function intersect_ellipline,ellip,line,angle=angle,plot=plot,_extra=_extra
 ; ellip: array with the ellip parameters as from fitting ellipse
 ; line: array with the line parameters: y = line[0]x + line[1] (mx+b)
+; angle: line[0] angle with the x axis
 
+angle = (~keyword_set(angle))?atan(line[0]):angle
+angle = (angle ge 180)?angle-360:angle
 ;ploting
 if keyword_set(plot) then begin
    plot_line,line,_extra=_extra
    plot_ellips,ellip,/over,/zero
-   pause
+;   pause
 endif
 
 ;1st transformation: set the ellipse in a new system: (0,0)
@@ -17,7 +20,7 @@ trans_line = [line[0],newb]
 if keyword_set(plot) then begin
    plot_line,trans_line,_extra=_extra
    plot_ellips,[ellip[0:1],0,0,ellip[4]],/over,/zero
-   pause
+;   pause
 endif
 
 
@@ -32,7 +35,7 @@ rot_line = [newm,b_y-newm*b_x]
 if keyword_set(plot) then begin
    plot_line,rot_line,_extra=_extra
    plot_ellips,[ellip[0:1],0,0,0],/over,/zero
-   pause
+;   pause
 endif
 
 ;Solve the system where ellipse and line cuts
@@ -53,14 +56,14 @@ if root ge 0 then begin
 endif 
 if root lt 0 then begin
    message,'There is not intersection'
-   goto,fin;return,-1
+   return,-1
 endif
 
 if keyword_set(plot) then begin
    plot_line,rot_line,_extra=_extra
    plot_ellips,[ellip[0:1],0,0,0],/over,/zero
    plots,x,y,psym=4
-   pause
+;   pause
 endif
 
 
@@ -73,7 +76,7 @@ if keyword_set(plot) then begin
    plot_line,trans_line,_extra=_extra
    plot_ellips,[ellip[0:1],0,0,ellip[4]],/over,/zero
    plots,xx,yy,psym=4
-   pause
+;   pause
 endif
 
 
@@ -85,9 +88,13 @@ if keyword_set(plot) then begin
    plot_line,line,_extra=_extra
    plot_ellips,ellip,/over,/zero
    plots,xx_t,yy_t,psym=4
-   pause
+;   pause
 endif
 
-fin:
-stop
+; find which of the two solutions is the one
+; in the direction of the line
+angle_int = atan(yy_t,xx_t)
+amb = min(abs(angle_int - angle),pos)
+return,[xx_t[pos],yy_t[pos]]
+
 end
