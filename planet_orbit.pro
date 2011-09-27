@@ -7,7 +7,7 @@ plot_command =(~keyword_set(over))?'plot,xrange=xrange,yrange=yrange':'oplot'
 
 if keyword_set(orbit) then begin
 ;plot ellipse
-   plot_ellips,planet.param,_extra=_extra
+   plot_ellips,planet.param,over=over,_extra=_extra
    plot_command = 'oplot'
 endif
 if keyword_set(points) then begin
@@ -36,13 +36,25 @@ step_size = period[planet_n-1]*365.25 / n_steps
 jd_struct = anytim2jd(date)
 jd_date = jd_struct.int + jd_struct.frac
 
+year = (strsplit(anytim(date,/ecs),'/',/extract))[0]
+long_asc_node = 74+(22.+((year-1900)*.84))/60.
+
+;start position
+helio, jd_date, planet_n, hel_rad, hel_lon, hel_lat
+polrec,hel_rad,hel_lon - long_asc_node,dx,dy,/degrees
+start = {date:jd2ecs(jd_date),$
+         radio:hel_rad,$
+         lon:hel_lon - long_asc_node,$
+         lat:hel_lat,$
+         orbit_x: dx,$
+         orbit_y: dy}
+
+;rest of the orbit
 jd = jd_date - (fix(n_steps/2)*step_size)
 
 values = fltarr(n_steps)
 planet_steps = {date:strarr(n_steps),radio:values,lon:values,lat:values,orbit_x: values, orbit_y: values}
 
-year = (strsplit(anytim(date,/ecs),'/',/extract))[0]
-long_asc_node = 74+(22.+((year-1900)*.84))/60.
 
 for i=0,n_steps-1 do begin
    helio, jd, planet_n, hel_rad, hel_lon, hel_lat
@@ -53,13 +65,13 @@ for i=0,n_steps-1 do begin
    polrec,hel_rad,hel_lon - long_asc_node,dx,dy,/degrees
    planet_steps.orbit_x[i] = dx
    planet_steps.orbit_y[i] = dy
-
+   ;increment the date for then next loop
    jd = jd + step_size
 endfor
 
 ;Get parameter values fitting steps to an ellipsis
  param = mpfitellipse(planet_steps.orbit_x, planet_steps.orbit_y,/tilt,/quiet)
 
-planet={n:planet_n,orbit:planet_steps,param:param}
+planet={n:planet_n,start:start,orbit:planet_steps,param:param}
 return,param
 end
