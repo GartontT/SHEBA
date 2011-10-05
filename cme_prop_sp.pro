@@ -22,14 +22,14 @@ inter = intersect_ellipline(ellip,[tan(cme_lon * !DtoR),0],angle=cme_lon)
 ;=============== Calculate the time it takes to the CME to get there
 rad = sqrt(total(inter^2)); radius[AU
 cme_t = (rad *  150e6) / cme_vel   ; (radius[AU] * km/[AU] ) / km/s
-cme_t1 = anytim(anytim(t_sol)+cme_t,/ecs)           ; Starting_time + travel_time
+cme_t1 = anytim(anytim(t_sol)+cme_t,/ccs)           ; Starting_time + travel_time
 
 ; and the velocity errors:
 cme_tn = (rad *  150e6) / (cme_vel-e_vel)   ; (radius[AU] * km/[AU] ) / km/s
-cme_t1n = anytim(anytim(t_sol)+cme_tn,/ecs)           ; Starting_time + travel_time
+cme_t1n = anytim(anytim(t_sol)+cme_tn,/ccs)           ; Starting_time + travel_time
 ; and the velocity errors:
 cme_tp = (rad *  150e6) / (cme_vel+e_vel)   ; (radius[AU] * km/[AU] ) / km/s
-cme_t1p = anytim(anytim(t_sol)+cme_tp,/ecs)           ; Starting_time + travel_time
+cme_t1p = anytim(anytim(t_sol)+cme_tp,/ccs)           ; Starting_time + travel_time
 
 
   ; and plot it
@@ -49,14 +49,14 @@ polrec,planet_t1_rad,planet_t1_lon,planet_t1_x,planet_t1_y,/degrees
   ;set_line_color
   ;plots,planet_t1_x,planet_t1_y,psym=4,color=3
 hitpos=planet.start
-hitpos.date = jd2ecs(jd)
+hitpos.date = anytim(jd2ecs(jd),/ccs)
 hitpos.radio = planet_t1_rad
 hitpos.lon = planet_t1_lon
 hitpos.lat = planet_t1_lat
 hitpos.orbit_x = planet_t1_x
 hitpos.orbit_y = planet_t1_y
 
-inputs = {st_time:anytim(t_sol,/ecs), st_long:x_sol[0], width:dlong, cme_vel:cme_vel, cme_vel_e: e_vel}
+inputs = {st_time:anytim(t_sol,/ccs), st_long:x_sol[0], st_long_hci:cme_lon,width:dlong, cme_vel:cme_vel, cme_vel_e: e_vel}
 minmaxt = {t_min:cme_t1p, t_max:cme_t1n}
 
 planet_out = {n:planet.n,start:planet.start,orbit:planet.orbit,param:planet.param,hitpos:hitpos,hitormiss:0b,inputs:inputs,minmax_t:minmaxt}

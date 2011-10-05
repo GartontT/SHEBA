@@ -223,13 +223,14 @@ end
 
 pro prop_end,t0=t0,x0=x0,width=width,vel=vel,e_vel=e_vel,FILE_OUT = FILE_OUT
 
-if ~keyword_set(t0) then t0 = systim()
+if ~keyword_set(t0) then t0 = anytim(systim(),/ccs) else t0=anytim(t0,/ccs)
 if ~keyword_set(x0) then x0=[0]; lon-lat HGI
 if ~keyword_set(width) then width=45 ; width in deg
 if ~keyword_set(vel) then vel=800 ;km/s
 if ~keyword_set(e_vel) then e_vel=0 ;km/s
 if ~keyword_set(file_out) then file_out = '/tmp/prop_'+string(strcompress(t0,/remove_all))
 
+planet_name = ['MERCURY','VENUS','EARTH','MARS','JUPITER','SATURN','URANUS','NEPTUNE','PLUTO']
 
 xsol = [x0,0]
 for i=1,9 do begin
@@ -261,18 +262,30 @@ endfor
 close,/all
 
 openw,lun,file_out+'.csv',/get_lun
-printf,lun,"Starting_time,Starting_long,width,CME_vel,CME_vel_error,planet,distance,hit,ETA,ETA_Min,ETA_Max"
-start_str = t0 + ',' + string(x0,format='(F6.2)') +',' + string(width,format='(F6.2)') +','+string(vel,format='(F7.2)') +','+string(e_vel,format='(F7.2)')
+printf,lun,"time_start,long_hg,long_hci,long_width,v,v_err,target_obj,r_hci,HitOrMiss,ETA,ETA_min,ETA_max,Dt,Dt_min,Dt_max"
+start_str = t0 + ',' + $
+            string(x0,format='(F6.2)') +',' + $
+            string(planet_all[0].inputs.st_long_hci,format='(F6.2)') +',' + $
+            string(width,format='(F6.2)') +','+ $
+            string(vel,format='(F7.2)') +','+$
+            string(e_vel,format='(F7.2)')
 for i = 0,8  do begin
-   t1_out = (planet_all[i].hitormiss eq 0)?'0':planet_all[i].hitpos.date
-   t1_out_min = (t1_out eq '0')?'0':planet_all[i].minmax_t.t_min
-   t1_out_max = (t1_out eq '0')?'0':planet_all[i].minmax_t.t_max
-   rest_str = string(planet_all[i].n,format='(I1)') + ',' + $ ; Planet
+   t1_out = (planet_all[i].hitormiss eq 0)?'':planet_all[i].hitpos.date
+   t1_out_min = (t1_out eq '')?'':planet_all[i].minmax_t.t_min
+   t1_out_max = (t1_out eq '')?'':planet_all[i].minmax_t.t_max
+   dt1_out = (t1_out eq '')?'':string((anytim(planet_all[i].hitpos.date) - anytim(t0))/(3600.*24.),format='(F7.3)')
+   dt1_out_min = (t1_out eq '')?'':string((anytim(planet_all[i].minmax_t.t_min) - anytim(t0))/(3600.*24.),format='(F7.3)')
+   dt1_out_max = (t1_out eq '')?'':string((anytim(planet_all[i].minmax_t.t_max) - anytim(t0))/(3600.*24.),format='(F7.3)')
+
+   rest_str = planet_name[planet_all[i].n-1] + ',' + $ ; Planet
               string(planet_all[i].start.radio,format='(F7.3)') +',' +  $ ; distance
               string(planet_all[i].hitormiss,format='(I1)') +',' +  $ ; HitOrMiss
               t1_out +',' + $                                         ; time to reach earth
               t1_out_min +',' + $                                     ; min time
-              t1_out_max                                         ; max time
+              t1_out_max   +',' + $                                   ; max time
+              dt1_out +',' + $                                        ; days to reach earth
+              dt1_out_min +',' + $                                    ; min number of days
+              dt1_out_max                                             ; max number of days
    printf,lun,start_str+','+rest_str
 endfor
 close,/all
