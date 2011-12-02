@@ -1,0 +1,12 @@
+
+
+	</div><!-- links box -->
+	</div><!-- mid box-->
+	<div class="output"><!-- images box -->
+	  <img id='inner' src='sep_inner.png'>
+	  <img id='outer' src='sep_outer.png'>
+	</div><!-- images box -->
+      </div> <!-- tabbed_box-->
+    </div> <!-- frame -->
+  </body>
+</html>

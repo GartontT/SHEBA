@@ -1,0 +1,200 @@
+<html>
+  <head>
+    <title>SW PM Output</title>
+    <style>
+      body {
+      background-image:url(http://cagnode58.cs.tcd.ie:8080/PropagationModelGUI/common_files/images/background.jpg);
+      background-repeat:no-repeat;
+      background-position:top center;
+      background-color:#7d8891;
+      margin:10px;
+      }
+      .frame {
+      margin: 0px auto 0px auto;
+      width: 1000px;
+      }
+      
+      .frame h4 {  
+      font-family:Arial, Helvetica, sans-serif;  
+      font-size:22px;  
+      color:#ffffff;  
+      letter-spacing:-1px;  
+      margin-bottom:24px; 
+      margin-left:125px;
+      margin-top:18px;
+      }  
+      .frame h4 small {  
+      color:#e3e9ec;  
+      font-weight:normal;  
+      font-size:10px;  
+      font-family:Verdana, Arial, Helvetica, sans-serif;
+      text-transform:uppercase;  
+      position:relative;  
+      top:20px;  
+      left:-185px;  
+      letter-spacing:0px;  
+      }  
+      .logo{
+      position:relative;
+      margin-bottom:-65px;
+      }
+      .logo img{
+      height: 70px;
+      }
+      .tabbed_box{
+      border:1px solid #494e52;  
+      background-color:#ffffff;  
+      padding:4px;  
+      width:1000px;
+      /*height:820px;*/
+      }
+      .mid {
+      border:1px solid #494e52;  
+      background-color:#9d9d9d;  
+      padding:8px;  
+      width:980px;
+      height:350px;
+      }
+      .tabbed_area {  
+      border:1px solid #494e52;  
+      background-color:#636d76;  
+      padding:8px;  
+      width:300px;
+      float:left;
+      } 
+      ul.tabs {  
+      margin:0px; padding:0px;  
+      margin-top:5px;
+      margin-bottom:6px;
+      }  
+      ul.tabs li {  
+      list-style:none;  
+      display:inline;  
+      }  
+      
+      ul.tabs li a {  
+      background-image:url(http://cagnode58.cs.tcd.ie:8080/PropagationModelGUI/common_files/images/tab_off.jpg);  
+      background-repeat:repeat-x;  
+      background-position:bottom;  
+      background-color:#464c54;  
+      color:#ffebb5;  
+      padding:8px 14px 8px 14px;  
+      text-decoration:none;  
+      font-size:9px;  
+      font-family:Verdana, Arial, Helvetica, sans-serif;  
+      font-weight:bold;  
+      text-transform:uppercase;  
+      border:1px solid #464c54;  
+      }  
+      ul.tabs li a:hover {  
+      background-color:#2f343a;  
+      border-color:#2f343a;  
+      }  
+      ul.tabs li a.active {  
+      background-image:url(http://cagnode58.cs.tcd.ie:8080/PropagationModelGUI/common_files/images/tab_on.jpg);  
+      background-repeat:repeat-x;  
+      background-position:top;  
+      background-color:#ffffff;  
+      color:#282e32;  
+      border:1px solid #464c54;  
+      border-bottom: 0px solid #ffffff;  
+      }  
+      
+      .content {  
+      background-image:url(http://cagnode58.cs.tcd.ie:8080/PropagationModelGUI/common_files/images/content_bottom.jpg);  
+      background-repeat:repeat-x;  
+      background-position:bottom;  
+      background-color:#ffffff;  
+      padding:10px;  
+      border:1px solid #464c54;  
+      }  
+      #content_2, #content_3 { display:none; }  
+      content ul {  
+      margin:0px;  
+      padding:0px 0px 0px 20px;  
+      }  
+      .content ul li {  
+      list-style:none;  
+      border-bottom:1px solid #d6dde0;  
+      padding-top:15px;  
+      padding-bottom:15px;  
+      font-size:13px;  
+      }  
+      .content ul li input {  
+      /*    color:#8b959c;  */
+      font-size:12px;  
+      text-transform:uppercase;  
+      font-family:Verdana, Arial, Helvetica, sans-serif;  
+      position:relative;  
+      left:4px;  
+      top:0px;  
+      }  
+      .content ul li:last-child {  
+      text-align: right;
+      border-bottom:none;  
+      }  
+      .result {  
+/*      position:relative;
+      display:inline; */
+      width:400px;
+      float:left;
+      } 
+      .result ul li{
+      position:relative;  
+      left:25px;  
+      top:0px;  
+      list-style:none;  
+      display:inline;  
+      }
+      .result table{
+      position:relative;
+      left: 25px;
+      width:90%;
+      border:solid;
+      text-decoration:none;  
+      font-size:11px;  
+      font-family:Verdana, Arial, Helvetica, sans-serif;  
+      border-collapse:collapse;
+      }
+      .resutl table th{
+      font-weight:bold;  
+      text-transform:uppercase;  
+      }
+      .result td{
+      vertical-align:top;
+      }
+      .links {  
+/*      position:relative;
+      display:inline; */
+      width:250px;
+      float:left;
+/*      margin-top: -20px;*/
+      } 
+      .output{
+      width:1000px;
+      }
+      .output img{
+       width: 495px;
+      }
+      .download {  
+      text-align: right;
+      border-bottom:none;  
+      }  
+    </style> 
+
+
+  </head>
+  <body>
+    <div id="frame" class="frame">
+      <div id="logo" class="logo">
+	<img src="http://cagnode58.cs.tcd.ie:8080/PropagationModelGUI/common_files/images/helio_logo_small_bg.png">
+      </div>
+      <h4>SW Propagation model Output</h4>
+      <div id="tabbed_box_1" class="tabbed_box">
+	<div class="mid"> <!-- links box -->
+	<div class="tabbed_area"><!-- input box -->
+	  <ul class="tabs"> <!-- tab ittems -->
+	    <li><a href="#" title="content_1" class="tab active">Input</a></li>
+	  </ul>
+	  <div id="content_1" class="content"> <!-- input values -->
+	    <ul>

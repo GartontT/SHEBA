@@ -1,0 +1,138 @@
+<?xml version='1.0'?>
+<VOTABLE version="1.1"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="http://www.ivoa.net/xml/VOTable/v1.1 http://www.ivoa.net/xml/VOTable/v1.1"
+ xmlns="http://www.ivoa.net/xml/VOTable/v1.1">
+<!--
+ !  VOTable written by STIL version 3.0 (uk.ac.starlink.votable.VOTableWriter)
+ !  at 2011-10-20T15:28:25
+ !-->
+<RESOURCE>
+<TABLE name="web_sw/table.csv" nrows="9">
+<FIELD arraysize="23" datatype="char" name="time_start" ucd="TIME" unit="iso-8601"/>
+<FIELD datatype="float" name="long_hg"/>
+<FIELD datatype="float" name="long_hgi"/>
+<FIELD datatype="double" name="vsw"/>
+<FIELD arraysize="7" datatype="char" name="target_obj"/>
+<FIELD datatype="float" name="fin_longhig"/>
+<FIELD datatype="float" name="finlong_hg"/>
+<FIELD datatype="short" name="HitOrMiss">
+<VALUES null='-32768'/>
+</FIELD>
+<FIELD datatype="float" name="Dt"/>
+<FIELD arraysize="23" datatype="char" name="ETA" ucd="TIME" unit="iso-8601"/>
+<DATA>
+<TABLEDATA>
+  <TR>
+    <TD>2011-10-20T16:28:15.000</TD>
+    <TD>0.0</TD>
+    <TD>49.15</TD>
+    <TD>400000.0</TD>
+    <TD>MERCURY</TD>
+    <TD>206.09</TD>
+    <TD>156.94</TD>
+    <TD>1</TD>
+    <TD>9.47</TD>
+    <TD>2011-10-30T03:38:51.025</TD>
+  </TR>
+  <TR>
+    <TD>2011-10-20T16:28:15.000</TD>
+    <TD>0.0</TD>
+    <TD>49.15</TD>
+    <TD>400000.0</TD>
+    <TD>VENUS</TD>
+    <TD>183.83</TD>
+    <TD>134.68</TD>
+    <TD>1</TD>
+    <TD>6.69</TD>
+    <TD>2011-10-27T09:01:58.619</TD>
+  </TR>
+  <TR>
+    <TD>2011-10-20T16:28:15.000</TD>
+    <TD>0.0</TD>
+    <TD>49.15</TD>
+    <TD>400000.0</TD>
+    <TD>EARTH</TD>
+    <TD>380.21</TD>
+    <TD>331.06</TD>
+    <TD>1</TD>
+    <TD>19.84</TD>
+    <TD>2011-11-09T12:44:27.277</TD>
+  </TR>
+  <TR>
+    <TD>2011-10-20T16:28:15.000</TD>
+    <TD>0.0</TD>
+    <TD>49.15</TD>
+    <TD>400000.0</TD>
+    <TD>MARS</TD>
+    <TD>387.95</TD>
+    <TD>338.8</TD>
+    <TD>1</TD>
+    <TD>18.27</TD>
+    <TD>2011-11-07T23:03:50.122</TD>
+  </TR>
+  <TR>
+    <TD>2011-10-20T16:28:15.000</TD>
+    <TD>0.0</TD>
+    <TD>49.15</TD>
+    <TD>400000.0</TD>
+    <TD>JUPITER</TD>
+    <TD>96.55</TD>
+    <TD>47.4</TD>
+    <TD>1</TD>
+    <TD>33.12</TD>
+    <TD>2011-11-22T19:18:09.183</TD>
+  </TR>
+  <TR>
+    <TD>2011-10-20T16:28:15.000</TD>
+    <TD>0.0</TD>
+    <TD>49.15</TD>
+    <TD>400000.0</TD>
+    <TD>SATURN</TD>
+    <TD>269.81</TD>
+    <TD>220.66</TD>
+    <TD>1</TD>
+    <TD>51.51</TD>
+    <TD>2011-12-11T04:47:12.322</TD>
+  </TR>
+  <TR>
+    <TD>2011-10-20T16:28:15.000</TD>
+    <TD>0.0</TD>
+    <TD>49.15</TD>
+    <TD>400000.0</TD>
+    <TD>URANUS</TD>
+    <TD>253.25</TD>
+    <TD>204.1</TD>
+    <TD>1</TD>
+    <TD>88.16</TD>
+    <TD>2012-01-16T20:14:37.346</TD>
+  </TR>
+  <TR>
+    <TD>2011-10-20T16:28:15.000</TD>
+    <TD>0.0</TD>
+    <TD>49.15</TD>
+    <TD>400000.0</TD>
+    <TD>NEPTUNE</TD>
+    <TD>258.04</TD>
+    <TD>208.89</TD>
+    <TD>1</TD>
+    <TD>146.95</TD>
+    <TD>2012-03-15T15:22:44.007</TD>
+  </TR>
+  <TR>
+    <TD>2011-10-20T16:28:15.000</TD>
+    <TD>0.0</TD>
+    <TD>49.15</TD>
+    <TD>400000.0</TD>
+    <TD>PLUTO</TD>
+    <TD>200.87</TD>
+    <TD>151.72</TD>
+    <TD>1</TD>
+    <TD>145.07</TD>
+    <TD>2012-03-13T18:06:19.632</TD>
+  </TR>
+</TABLEDATA>
+</DATA>
+</TABLE>
+</RESOURCE>
+</VOTABLE>

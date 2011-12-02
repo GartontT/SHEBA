@@ -193,7 +193,7 @@ spawn,join_all
 delete_midfiles = 'rm '+file_input+' '+file_output+' '+file_cxs 
 spawn,delete_midfiles
 end
-pro prop_sep,t0=t0,x0=x0,vel=vel,e_vel=e_vel,PATH_OUT=path_out
+pro prop_sep,beta=beta,t0=t0,x0=x0,vel=vel,e_vel=e_vel,PATH_OUT=path_out
 
 if ~keyword_set(path_out) then path_out='/tmp/'
 if ~keyword_set(t0) then t0 = anytim(systim(),/ccs) else t0=anytim(t0,/ccs)
@@ -201,8 +201,8 @@ if ~keyword_set(x0) then x0=[0]; lon-lat HG
 if ~keyword_set(vel) then vel=400 ;km/s
 if ~keyword_set(e_vel) then e_vel=0 ;km/s
 ;if ~keyword_set(file_out) then file_out = '/tmp/prop_'+string(strcompress(t0,/remove_all))
-
-part_speed=0.9 ;c times! relativistic particles
+if ~keyword_set(beta) then beta = 0.9
+part_speed=beta ;c times! relativistic particles
 
 ;; 1 Calculate the spiral with the input values.
 vel_wind=abs(vel)+[-e_vel,+e_vel]

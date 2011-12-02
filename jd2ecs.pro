@@ -9,7 +9,7 @@ function jd2ecs,jd
   seg = (min - fix(min)) * 60.
 
   date = string(yr,mn,d,fix(hr),fix(min),seg, $
-                format = '(I4.4,2("/",I2.2)," ",2(I2.2,":"),F6.3)')
+                format = '(I4.4,2("/",I2.2)," ",2(I2.2,":"),F06.3)')
   return,date
 end
 

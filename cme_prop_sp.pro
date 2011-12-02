@@ -3,8 +3,8 @@ if ~keyword_set(planetn) then planetn = 3
 if ~keyword_set(t_sol) then t_sol = systim()
 if ~keyword_set(cme_vel) then cme_vel=800 ;km/s
 if ~keyword_set(e_vel) then e_vel=0 ;km/s
-if ~keyword_set(x_sol) then x_sol=[0,0]; lon-lat HGI
-if ~keyword_set(dlong) then dlong=2 ; width in deg
+if (n_elements(x_sol) ne 2) then x_sol=[0,0]; lon-lat HGI
+if (n_elements(dlong) eq 0) then dlong=45
 
 cme_lon = long_hgihg(x_sol[0],/hg,date=t_sol) ;degrees
 ;print,cme_lon

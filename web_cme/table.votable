@@ -1,0 +1,188 @@
+<?xml version='1.0'?>
+<VOTABLE version="1.1"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="http://www.ivoa.net/xml/VOTable/v1.1 http://www.ivoa.net/xml/VOTable/v1.1"
+ xmlns="http://www.ivoa.net/xml/VOTable/v1.1">
+<!--
+ !  VOTable written by STIL version 3.0 (uk.ac.starlink.votable.VOTableWriter)
+ !  at 2011-10-20T02:37:46
+ !-->
+<RESOURCE>
+<TABLE name="web_cme/table.csv" nrows="9">
+<FIELD arraysize="23" datatype="char" name="time_start" ucd="TIME" unit="iso-8601"/>
+<FIELD datatype="float" name="long_hg"/>
+<FIELD datatype="float" name="long_hci"/>
+<FIELD datatype="float" name="long_width"/>
+<FIELD datatype="float" name="v"/>
+<FIELD datatype="float" name="v_err"/>
+<FIELD arraysize="7" datatype="char" name="target_obj"/>
+<FIELD datatype="float" name="r_hci"/>
+<FIELD datatype="short" name="HitOrMiss">
+<VALUES null='-32768'/>
+</FIELD>
+<FIELD arraysize="23" datatype="char" name="ETA"/>
+<FIELD arraysize="23" datatype="char" name="ETA_min" ucd="TIME" unit="iso-8601"/>
+<FIELD arraysize="23" datatype="char" name="ETA_max" ucd="TIME" unit="iso-8601"/>
+<FIELD arraysize="7" datatype="char" name="Dt"/>
+<FIELD datatype="float" name="Dt_min"/>
+<FIELD datatype="float" name="Dt_max"/>
+<DATA>
+<TABLEDATA>
+  <TR>
+    <TD>2011-10-20T03:37:28.000</TD>
+    <TD>120.0</TD>
+    <TD>70.32</TD>
+    <TD>360.0</TD>
+    <TD>800.0</TD>
+    <TD>100.0</TD>
+    <TD>MERCURY</TD>
+    <TD>0.466</TD>
+    <TD>1</TD>
+    <TD>2011-10-20T21:35:41.151</TD>
+    <TD>2011-10-20T19:35:53.023</TD>
+    <TD>2011-10-21T00:09:43.030</TD>
+    <TD>0.749</TD>
+    <TD>0.666</TD>
+    <TD>0.856</TD>
+  </TR>
+  <TR>
+    <TD>2011-10-20T03:37:28.000</TD>
+    <TD>120.0</TD>
+    <TD>70.32</TD>
+    <TD>360.0</TD>
+    <TD>800.0</TD>
+    <TD>100.0</TD>
+    <TD>VENUS</TD>
+    <TD>0.725</TD>
+    <TD>1</TD>
+    <TD>2011/10/21 17:03: 3.505</TD>
+    <TD>2011-10-21T12:53:32.893</TD>
+    <TD>2011-10-21T22:23:51.434</TD>
+    <TD>*******</TD>
+    <TD>1.386</TD>
+    <TD>1.782</TD>
+  </TR>
+  <TR>
+    <TD>2011-10-20T03:37:28.000</TD>
+    <TD>120.0</TD>
+    <TD>70.32</TD>
+    <TD>360.0</TD>
+    <TD>800.0</TD>
+    <TD>100.0</TD>
+    <TD>EARTH</TD>
+    <TD>0.996</TD>
+    <TD>1</TD>
+    <TD>2011/10/22 07:04: 2.196</TD>
+    <TD>2011-10-22T01:21:05.063</TD>
+    <TD>2011-10-22T14:24:58.510</TD>
+    <TD>*******</TD>
+    <TD>1.905</TD>
+    <TD>2.45</TD>
+  </TR>
+  <TR>
+    <TD>2011-10-20T03:37:28.000</TD>
+    <TD>120.0</TD>
+    <TD>70.32</TD>
+    <TD>360.0</TD>
+    <TD>800.0</TD>
+    <TD>100.0</TD>
+    <TD>MARS</TD>
+    <TD>1.6</TD>
+    <TD>1</TD>
+    <TD>2011-10-23T18:15:49.283</TD>
+    <TD>2011-10-23T08:38:13.584</TD>
+    <TD>2011-10-24T06:38:26.609</TD>
+    <TD>3.610</TD>
+    <TD>3.209</TD>
+    <TD>4.126</TD>
+  </TR>
+  <TR>
+    <TD>2011-10-20T03:37:28.000</TD>
+    <TD>120.0</TD>
+    <TD>70.32</TD>
+    <TD>360.0</TD>
+    <TD>800.0</TD>
+    <TD>100.0</TD>
+    <TD>JUPITER</TD>
+    <TD>4.965</TD>
+    <TD>1</TD>
+    <TD>2011-10-31T18:56:52.480</TD>
+    <TD>2011-10-30T11:54:43.094</TD>
+    <TD>2011-11-02T10:51:04.549</TD>
+    <TD>11.638</TD>
+    <TD>10.345</TD>
+    <TD>13.301</TD>
+  </TR>
+  <TR>
+    <TD>2011-10-20T03:37:28.000</TD>
+    <TD>120.0</TD>
+    <TD>70.32</TD>
+    <TD>360.0</TD>
+    <TD>800.0</TD>
+    <TD>100.0</TD>
+    <TD>SATURN</TD>
+    <TD>9.669</TD>
+    <TD>1</TD>
+    <TD>2011-11-09T03:32:53.530</TD>
+    <TD>2011-11-06T22:13:24.027</TD>
+    <TD>2011-11-12T00:06:31.463</TD>
+    <TD>19.997</TD>
+    <TD>17.775</TD>
+    <TD>22.854</TD>
+  </TR>
+  <TR>
+    <TD>2011-10-20T03:37:28.000</TD>
+    <TD>120.0</TD>
+    <TD>70.32</TD>
+    <TD>360.0</TD>
+    <TD>800.0</TD>
+    <TD>100.0</TD>
+    <TD>URANUS</TD>
+    <TD>20.076</TD>
+    <TD>1</TD>
+    <TD>2011-11-29T00:06:50.783</TD>
+    <TD>2011-11-24T13:50:14.918</TD>
+    <TD>2011-12-04T16:45:19.752</TD>
+    <TD>39.854</TD>
+    <TD>35.426</TD>
+    <TD>45.547</TD>
+  </TR>
+  <TR>
+    <TD>2011-10-20T03:37:28.000</TD>
+    <TD>120.0</TD>
+    <TD>70.32</TD>
+    <TD>360.0</TD>
+    <TD>800.0</TD>
+    <TD>100.0</TD>
+    <TD>NEPTUNE</TD>
+    <TD>30.001</TD>
+    <TD>1</TD>
+    <TD>2011-12-24T12:14:17.172</TD>
+    <TD>2011-12-17T05:56:51.709</TD>
+    <TD>2012-01-02T20:19:32.768</TD>
+    <TD>65.359</TD>
+    <TD>58.097</TD>
+    <TD>74.696</TD>
+  </TR>
+  <TR>
+    <TD>2011-10-20T03:37:28.000</TD>
+    <TD>120.0</TD>
+    <TD>70.32</TD>
+    <TD>360.0</TD>
+    <TD>800.0</TD>
+    <TD>100.0</TD>
+    <TD>PLUTO</TD>
+    <TD>32.117</TD>
+    <TD>1</TD>
+    <TD>2012-01-04T12:44:42.883</TD>
+    <TD>2011-12-27T01:03:54.563</TD>
+    <TD>2012-01-15T10:37:10.724</TD>
+    <TD>76.380</TD>
+    <TD>67.893</TD>
+    <TD>87.291</TD>
+  </TR>
+</TABLEDATA>
+</DATA>
+</TABLE>
+</RESOURCE>
+</VOTABLE>

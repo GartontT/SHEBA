@@ -1,6 +1,10 @@
 function plot_orbit,planet,over=over,orbit=orbit,points=points,zero=zero,coord=coord,ninety=ninety,_extra=_extra
 
 ; check planet is a valid structure
+if ~tag_exist(planet,'param') then begin
+   planet_input = planet
+   ellip = planet_orbit(planet.start.date,planet.n,planet=planet)
+endif
 ; check other variables
 
 plot_command =(~keyword_set(over))?'plot,xrange=xrange,yrange=yrange':'oplot'

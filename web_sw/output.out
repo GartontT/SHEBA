@@ -1,0 +1,68 @@
+#Starting parameters
+Starting time: 2011-10-20T16:28:15.000
+Starting longitude (HG):   0.00
+Starting longitude (HGI):  49.15
+Solar Wind Velocity: 400000.00
+------------------------------
+planet:MERCURY
+Long HI:206.09
+Long HGi:156.94
+hit:1
+T Diff:  9.47
+ETA:2011-10-30T03:38:51.025
+------------------------------
+planet:VENUS
+Long HI:183.83
+Long HGi:134.68
+hit:1
+T Diff:  6.69
+ETA:2011-10-27T09:01:58.619
+------------------------------
+planet:EARTH
+Long HI:380.21
+Long HGi:331.06
+hit:1
+T Diff: 19.84
+ETA:2011-11-09T12:44:27.277
+------------------------------
+planet:MARS
+Long HI:387.95
+Long HGi:338.80
+hit:1
+T Diff: 18.27
+ETA:2011-11-07T23:03:50.122
+------------------------------
+planet:JUPITER
+Long HI: 96.55
+Long HGi: 47.40
+hit:1
+T Diff: 33.12
+ETA:2011-11-22T19:18:09.183
+------------------------------
+planet:SATURN
+Long HI:269.81
+Long HGi:220.66
+hit:1
+T Diff: 51.51
+ETA:2011-12-11T04:47:12.322
+------------------------------
+planet:URANUS
+Long HI:253.25
+Long HGi:204.10
+hit:1
+T Diff: 88.16
+ETA:2012-01-16T20:14:37.346
+------------------------------
+planet:NEPTUNE
+Long HI:258.04
+Long HGi:208.89
+hit:1
+T Diff:146.95
+ETA:2012-03-15T15:22:44.007
+------------------------------
+planet:PLUTO
+Long HI:200.87
+Long HGi:151.72
+hit:1
+T Diff:145.07
+ETA:2012-03-13T18:06:19.632

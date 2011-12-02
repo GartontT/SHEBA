@@ -1,0 +1,84 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <title>Propagation Model</title>
+    <!-- <script type="text/javascript" src="./common_files/js/slider.js"></script> -->
+    <script type="text/javascript" src="./common_files/js/jquery-1.4.4.min.js"></script>
+    <script type="text/javascript" src="./common_files/js/tabbedContent.js"></script>
+    <link href="./common_files/css/tabbedContent.css" rel="stylesheet" type="text/css">
+  </head>
+<body>
+<!--  This is a test image -->
+<!-- Better one: http://net.tutsplus.com/tutorials/html-css-techniques/how-to-create-a-slick-tabbed-content-area/ -->
+<img 
+	alt="My banner" 
+	src="common_files/images/helio_logo_small.png" 
+/>
+<BR>
+HELIO Propagation Model<BR> 
+<BR>
+
+<div class='container'>
+  <div class='tabbed_content'>
+    <div class='tabs'>
+      <div calss='moving_bg'>
+	&nbsp;
+      </div>
+      <span class='tab_item'>
+	CME
+      </span>
+      <span class='tab_item'>
+	HSSW
+      </span>
+      <span class='tab_item'>
+	SEP
+      </span>
+    </div>
+    <div class='slide_content'>
+      <div class='tabslider'>
+	<!-- content goes here  -->
+	<table>
+	  <td>
+	<FORM METHOD=POST ACTION="CallPM.jsp">
+	  Start Time of the CME = <INPUT TYPE=TEXT NAME=startTime VALUE="2010-01-01T00:00" SIZE=16><BR>
+	  Longitude of the CME = <INPUT TYPE=TEXT NAME=startPosition SIZE=3><BR>
+	  Width of the CME = <INPUT TYPE=TEXT NAME=startAngle SIZE=3><BR>
+	  Speed of the CME = <INPUT TYPE=TEXT NAME=startSpeed SIZE=4><BR>
+	  <P>
+	    <INPUT TYPE=SUBMIT>
+	</FORM>
+	</td>
+	</table>
+	<table>
+	  <td>
+	<FORM METHOD=POST ACTION="CallPM.jsp">
+	  Start Time of the CME = <INPUT TYPE=TEXT NAME=startTime VALUE="2010-01-01T00:00" SIZE=16><BR>
+	  Longitude of the CME = <INPUT TYPE=TEXT NAME=startPosition SIZE=3><BR>
+	  Width of the CME = <INPUT TYPE=TEXT NAME=startAngle SIZE=3><BR>
+	  Speed of the CME = <INPUT TYPE=TEXT NAME=startSpeed SIZE=4><BR>
+	  <P>
+	    <INPUT TYPE=SUBMIT>
+	</FORM>
+	  </td>
+	</table>
+	<table>
+	  <td>
+	  <FORM METHOD=POST ACTION="CallPM.jsp">
+	    Start Time of the CME = <INPUT TYPE=TEXT NAME=startTime VALUE="2010-01-01T00:00" SIZE=16><BR>
+	    Longitude of the CME = <INPUT TYPE=TEXT NAME=startPosition SIZE=3><BR>
+	    Width of the CME = <INPUT TYPE=TEXT NAME=startAngle SIZE=3><BR>
+	    Speed of the CME = <INPUT TYPE=TEXT NAME=startSpeed SIZE=4><BR>
+	    <P>
+	      <INPUT TYPE=SUBMIT>
+	  </FORM>
+	  </td>
+	</table>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+</body>
+</html>

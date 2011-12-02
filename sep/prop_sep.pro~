@@ -1,0 +1,97 @@
+@../angleinrange.pro
+@../long_hgihg.pro
+pro prop_sep,t0=t0,x0=x0,vel=vel,e_vel=e_vel,FILE_OUT=file_out
+
+if ~keyword_set(t0) then t0 = anytim(systim(),/ccs) else t0=anytim(t0,/ccs)
+if ~keyword_set(x0) then x0=[0]; lon-lat HGI
+if ~keyword_set(vel) then vel=400 ;km/s
+if ~keyword_set(e_vel) then e_vel=0 ;km/s
+if ~keyword_set(file_out) then file_out = '/tmp/prop_'+string(strcompress(t0,/remove_all))
+
+part_speed=0.9 ;c times! relativistic particles
+plot_limit = 4
+
+;; 1 Calculate the spiral with the input values.
+vel_wind=vel+[-e_vel,+e_vel]
+vel_wind_au = ( vel_wind / 150e6 ) * 24. * 60. * 60. ; AU per day
+rot_sun =  14.4                                      ; rotation rate of the Sun in degrees per day
+theta_sp = -findgen( 360 * 6. )                  ;
+r_spiral = -( vel_wind_au / rot_sun ) # theta_sp ; 2 dimension [(vel-e,vel+e),radius]
+
+;; --- change long in hg to hgi and obtain new angles in hgi
+;;     coordinate system.
+sw_lon = long_hgihg(x0[0],/hg,date=t0,long_asc_node=long_asc_node) ;degrees
+theta_spiral = theta_sp + sw_lon
+;theta_spiral = (theta_spiral+(360*6)) mod 360
+
+;; 2 Calculate planet positions. 
+jd_struct = anytim2jd(t0)
+jd = jd_struct.int + jd_struct.frac
+;; ---- defining structures
+start = {date:'',radio:0.,lon:0.,lat:0.,orbit_x:0.,orbit_y:0.}
+hit = {hitormiss:0b,eta:0.,date:'',swvel:0.,partvel:0.,dist:0.}
+input={date:anytim(t0,/ccs),long_hg:x0,long_hgi:sw_lon,vel:vel,e_vel:e_vel}
+planet = {n:0,name:'',start:start,hit:hit,input:input}
+
+;;---------------------------------------- starting to plot
+                                  set_line_color
+                                  plot,[0,0],[0,0],xrange=[-plot_limit,plot_limit],yrange=[-plot_limit,plot_limit],/xst,/yst
+                                  polrec,r_spiral[0,*],theta_spiral,spir_x,spir_y,/degrees
+                                  oplot,spir_x,spir_y,color=2
+                                  polrec,r_spiral[1,*],theta_spiral,spir_x,spir_y,/degrees
+                                  oplot,spir_x,spir_y,color=3
+                                  circle_sym, thick = 2, /fill
+
+;; ---- Calculating values for each planet
+for i=1,9 do begin
+   planet.n = i
+   ;; ---- Position
+   helio, jd, i, hel_rad, hel_lon, hel_lat
+   polrec,hel_rad,hel_lon - long_asc_node,dx,dy,/degrees
+   planet.start.date = t0
+   planet.start.radio = hel_rad
+   planet.start.lon = (hel_lon - long_asc_node + 360) mod 360
+   planet.start.lat = hel_lat
+   planet.start.orbit_x = dx
+   planet.start.orbit_y = dy
+                                  plots,dx,dy,color=3+i,psym=8
+
+   ;; ---- HitOrMiss?
+   for j=0,1 do begin
+      rad_hit = abs(r_spiral[j,*] - hel_rad)
+      stop
+      orbit_cross = where(rad_hit lt 0.01,nrad)
+      if nrad gt 0 then begin
+         pos_ang = (j eq 0)?[min(theta_spiral[orbit_cross]),max(theta_spiral[orbit_cross])]:[pos_ang,min(theta_spiral[orbit_cross]),max(theta_spiral[orbit_cross])]
+      endif
+   endfor
+
+   if n_elements(pos_ang) gt 0 then begin
+      hitormiss = angleinrange(mean(pos_ang),(max(pos_ang)-min(pos_ang))/2,planet.start.lon)
+      print, i,' ',pos_ang,' ',planet.start.lon
+      if hitormiss eq 1 then begin
+         planet.hit.swvel = (planet.start.radio*(planet.start.lon-sw_lon))/rot_sun
+         new_r_spiral = -( planet.hit.swvel / rot_sun) * theta_sp
+         lab_dist = where(new_r_spiral le planet.start.radio)
+         dist_SEspiral = 0
+         for dd=0,n_elements(lab_dist)-2 do dist_SEspiral=(r_spiral[lab_dist[dd+1]]-r_spiral[lab_dist[dd]])+dist_SEspiral
+         planet.hit.partvel = part_speed
+         planet.hit.dist = dist_SEspiral
+         planet.hit.eta = dist_SEspiral*500/part_speed  ; (1 AU = 150e6 km)/(c = 3e5 km/s) = 500 s.
+         planet.hit.date = anytim(anytim(t0)+planet.hit.eta,/ccs)
+         print,planet.n,' ',planet.hit.eta,' ',planet.hit.date,' ',planet.hit.swvel
+                                  
+                                  polrec,new_r_spiral[lab_dist],theta_spiral[lab_dist],spir_x,spir_y,/degrees
+                                  oplot,spir_x,spir_y,color=6
+
+      endif
+      planet.hit.hitormiss=hitormiss
+   endif
+   planet_all = (i eq 1)?planet:[planet_all,planet]
+endfor
+  
+
+
+
+
+end

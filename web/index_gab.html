@@ -1,0 +1,124 @@
+<html>
+<head>
+  <title>HELIO Propagation Model</title>
+
+  <link rel="stylesheet" href="common_files/css/style.css" type="text/css" media="screen" />
+
+  <script src="common_files/js/jquery-1.4.4.min.js"></script>
+  <script type="text/javascript">
+  //<![CDATA[ 
+  $(window).load(function(){
+  $(function() {
+    $('input').each(function() {
+        $.data(this, 'default', this.value);
+    }).css("color","gray")
+    .focus(function() {
+        if (!$.data(this, 'edited')) {
+            this.value = "";
+            $(this).css("color","black");
+        }
+    }).change(function() {
+        $.data(this, 'edited', this.value != "");
+    }).blur(function() {
+        if (!$.data(this, 'edited')) {
+            this.value = $.data(this, 'default');
+            $(this).css("color","gray");
+        }
+    });
+});
+  });
+  //]]> 
+  </script>  
+  <script>  
+	  // When the document loads do everything inside here ...
+	  $(document).ready(function(){
+		
+		// When a link is clicked
+		$("a.tab").click(function () {
+			
+			
+			// switch all tabs off
+			$(".active").removeClass("active");
+			
+			// switch this tab on
+			$(this).addClass("active");
+			
+			// slide all content up
+			$(".content").slideUp();
+			$(".explanation").slideUp();
+			
+			// slide this content up
+	                var number = $(this).attr("title").split('_');
+			//var content_show = $(this).attr("title");
+	                $("#content_"+number[1]).slideDown();
+			$("#explanation_"+number[1]).slideDown();
+		  
+		});
+	
+	  });
+  </script>  
+
+</head>
+<body>
+
+<div id="frame" class="frame"> <!-- frame -->
+<div id="logo" class="logo">
+  <img src="common_files/images/helio_logo_small_bg.png">
+</div>
+  <h4> Propagation model  <small> Select a tab</small></h4>
+  
+  <div id="tabbed_box_1" class="tabbed_box"> <!-- box-->
+    <div class="tabbed_area"> <!-- left box // tabs-->
+
+      <ul class="tabs"> <!-- tab ittems -->
+	<li><a href="#" title="content_1" class="tab active">CME</a></li>
+	<li><a href="#" title="content_2" class="tab">Solar Wind</a></li>
+	<li><a href="#" title="content_3" class="tab">SEP</a></li>
+      </ul>
+
+      <div id="content_1" class="content"> 
+	<FORM METHOD=POST ACTION="executeCME.jsp">
+	  <ul>
+	    <li> Start Time <INPUT TYPE=TEXT NAME=startTime VALUE="2010-01-01T00:00" SIZE=16></li>
+	    <li> Longitude <INPUT TYPE=TEXT NAME=startPosition VALUE="0" SIZE=3></li>
+	    <li> Width <INPUT TYPE=TEXT NAME=startAngle VALUE="45" SIZE=3></li>
+	    <li> Speed <INPUT TYPE=TEXT NAME=startSpeed VALUE="100" SIZE=4> &plusmn; <INPUT TYPE=TEXT NAME=errorSpeed VALUE="0" SIZE=4></li>
+	    <li> <INPUT TYPE=SUBMIT> </li> 
+	  </ul>
+	</FORM>
+      </div>
+      <div id="content_2" class="content"> 
+	<FORM METHOD=POST ACTION="executeSW.jsp">
+	  <ul>
+	    <li> Start Time <INPUT TYPE=TEXT NAME=startTime VALUE="2010-01-01T00:00" SIZE=16></li>
+	    <li> Longitude <INPUT TYPE=TEXT NAME=startPosition VALUE="0" SIZE=3></li>
+	    <li> Width <INPUT TYPE=TEXT NAME=startAngle VALUE="45" SIZE=3></li>
+	    <li> Speed <INPUT TYPE=TEXT NAME=startSpeed VALUE="100" SIZE=4> &plusmn; <INPUT TYPE=TEXT NAME=errorSpeed VALUE="0" SIZE=4></li>
+	    <li> <INPUT TYPE=SUBMIT> </li> 
+	  </ul>
+	</FORM>
+      </div>
+      <div id="content_3" class="content"> 
+	<FORM METHOD=POST ACTION="executeSEP.jsp">
+	  <ul>
+	    <li> Start Time <INPUT TYPE=TEXT NAME=startTime VALUE="2010-01-01T00:00" SIZE=16></li>
+	    <li> Longitude <INPUT TYPE=TEXT NAME=startPosition VALUE="0" SIZE=3></li>
+	    <li> Width <INPUT TYPE=TEXT NAME=startAngle VALUE="45" SIZE=3></li>
+	    <li> Speed <INPUT TYPE=TEXT NAME=startSpeed VALUE="100" SIZE=4> &plusmn; <INPUT TYPE=TEXT NAME=errorSpeed VALUE="0" SIZE=4></li>
+	    <li> <INPUT TYPE=SUBMIT> </li> 
+	  </ul>
+	</FORM>
+      </div>
+    </div> <!-- left box // tabs-->
+    <div class="explanation_area"> <!-- right box // sliding content-->
+      
+      <div id="explanation_1" class="explanation"> Explanation CME // Content CME </div>
+      <div id="explanation_2" class="explanation"> Explanation SW  // content SW </div>
+      <div id="explanation_3" class="explanation"> Explanation SEP // Content SEP </div>
+
+    </div> <!-- sliding content -->
+  </div> <!-- box-->
+
+</div> <!-- frame -->
+</body>
+</html>

@@ -1,0 +1,76 @@
+.container{
+}
+.tabbed_content {
+	background-color: #000000;
+/*   background-image:url(../images/brushed-metal.jpg);*/
+	width: 380px;	
+	style: center;
+}
+
+.tabs {
+	height: 20px;
+	position: relative;
+}
+
+.tabs .moving_bg {
+	padding: 0px;
+	background-color:#7F822A;
+	border-top-right-radius: 10% 50%;
+	border-top-left-radius: 10% 50%;
+	background-image:url(../images/arrow_down_green.gif);
+	position: absolute;
+	width: 170Px;
+	z-index: 190;
+	/*opacity:0.4;*/
+	/*filter:alpha(opacity=40);*/
+	left: 0;
+	padding-bottom: 0px;
+	background-position: center;
+	background-repeat: no-repeat;
+}
+
+.tabs .tab_item {
+	display: block;
+	float: left;
+	padding: 0px;
+	width: 100px;
+	color: #ffFFff;
+/*	background-image:url(../../brushed-metal.jpg);*/
+	text-align: center;
+	z-index: 80;
+	position: relative;
+	cursor: pointer;
+}
+
+.tabbed_content .slide_content {
+	overflow: hidden;
+	background-color: #FFFFFF;
+	padding: 20px 0px 20px 20px;
+	position: relative;
+	width: 380px;
+}
+
+.tabslider {
+	width: 1240px;
+}
+
+.tabslider table {
+	float: left;
+	width: 380px;
+	margin: 0px;
+	padding: 1px;
+	margin-right: 5px;
+}
+
+.tabslider ul a {
+	color: #ffffff;
+	text-decoration: none;
+}
+
+.tabslider ul a:hover {
+	color: #aaaaaa;
+}
+
+.tabslider ul li {
+	padding-bottom: 7px;
+}

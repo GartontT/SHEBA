@@ -1,0 +1,27 @@
+pro measuring_spiral,date,vel_wind=vel_wind
+
+; Convert date to Julian date
+  jd_struct = anytim2jd( date )
+  jd = jd_struct.int + jd_struct.frac
+ 
+; Calculate earth heliocentric latitude, longitude and distance from Sun
+  helio, jd, 3, hel_rad, hel_lon, hel_lat
+
+  vel_wind_au = ( vel_wind / 150e6 ) * 24. * 60. * 60. ; AU per day
+  rot_sun =  14.4 ; rotation rate of the Sun in degrees per day
+  theta_spiral = -findgen( 3000)/1000.*hel_lon
+  r_spiral = -( vel_wind_au / rot_sun ) * theta_spiral
+
+; Calculate line that pass through earth
+   dumb=min(abs(r_spiral-hel_rad),ll)
+   foot_point_planet=abs(theta_spiral[ll])                  ;abs(theta_spiral[ll]-hel_lon)
+   dist_SEspiral = 0
+   for dd=0,ll-1 do dist_SEspiral=(r_spiral[lab_dist[dd+1]]-r_spiral[lab_dist[dd]])+dist_SEspiral
+   print,'foot-point connected with ',planet_prop[persp-1].name,': ',string(foot_point_planet,format='(F7.2)'),' @ ',string(vel_wind,format='(I3)'),'km/s Total distance Spiral: ',dist_SEspiral*150e6,' km = ',dist_SEspiral*150e6/(1.392e6/2.) , 'Ro' ;,format='(F7.5)');,earth_lon,theta_spiral[ll]
+
+    polrec, r_spiral, ( theta_spiral)+ foot_point_planet, spir_x, spir_y, /degrees
+    oplot, spir_x, spir_y, color = planet_prop[persp-1].color+(.1*v), thick = 2
+
+
+
+end
