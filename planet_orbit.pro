@@ -1,9 +1,9 @@
 function plot_orbit,planet,over=over,orbit=orbit,points=points,zero=zero,coord=coord,ninety=ninety,_extra=_extra
 
 ; check planet is a valid structure
-if ~tag_exist(planet,'param') then begin
+if ~tag_exist(planet,'orbit_fit') then begin
    planet_input = planet
-   ellip = planet_orbit(planet.start.date,planet.n,planet=planet)
+   ellip = planet_orbit(planet.pos_t0.date,planet.n,planet=planet)
 endif
 ; check other variables
 
@@ -11,7 +11,7 @@ plot_command =(~keyword_set(over))?'plot,xrange=xrange,yrange=yrange':'oplot'
 
 if keyword_set(orbit) then begin
 ;plot ellipse
-   plot_ellips,planet.param,over=over,_extra=_extra
+   plot_ellips,planet.orbit_fit,over=over,_extra=_extra
    plot_command = 'oplot'
 endif
 if keyword_set(points) then begin
@@ -27,55 +27,66 @@ endif
 return,1
 end
 
-function planet_orbit,date,planet_n,planet=planet
+function planet_orbit,date,planet_n,planet=planet,all_planets=all_planets
+;-
+;  planet_orbit
+;+
 
-
+; Planet names
+names=['Mercury','Venus','Earth','Mars','Jupiter','Saturn','Uranus','Neptune','Pluto']
 ; Number of days for each planet to complete an orbit
 period=[0.2408,0.6152,1.0,1.8809,11.862,29.458,84.01,164.79,248.54]; * 365.25
 
 n_steps = 21
 
-step_size = period[planet_n-1]*365.25 / n_steps
+
+; Define structure to save orbit parameters
+orbit_steps = {date:strarr(n_steps),radio:fltarr(n_steps),lon:fltarr(n_steps),lat:fltarr(n_steps),orbit_x:fltarr(n_steps), orbit_y:fltarr(n_steps)}
 
 jd_struct = anytim2jd(date)
 jd_date = jd_struct.int + jd_struct.frac
 
 year = (strsplit(anytim(date,/ecs),'/',/extract))[0]
 long_asc_node = 74+(22.+((year-1900)*.84))/60.
+inputs = {st_time:'', st_long:0., st_long_hci:0.,width:0., cme_vel:0., cme_vel_e: 0.}
+minmaxt = {t_min:'', t_max:''}
 
-;start position
-helio, jd_date, planet_n, hel_rad, hel_lon, hel_lat
-polrec,hel_rad,hel_lon - long_asc_node,dx,dy,/degrees
-start = {date:jd2ecs(jd_date),$
-         radio:hel_rad,$
-         lon:hel_lon - long_asc_node,$
-         lat:hel_lat,$
-         orbit_x: dx,$
-         orbit_y: dy}
+; calculate each parameter for each planet
+; TODO: Check if this loop can be avoided using #...  
+;       the question is how to fill in the variables?
+for i=0,8 do begin
+   jd_dates = ((findgen(n_steps)-fix(n_steps/2))* period[i] * 365.25 / n_steps ) + jd_date
 
-;rest of the orbit
-jd = jd_date - (fix(n_steps/2)*step_size)
-
-values = fltarr(n_steps)
-planet_steps = {date:strarr(n_steps),radio:values,lon:values,lat:values,orbit_x: values, orbit_y: values}
-
-
-for i=0,n_steps-1 do begin
-   helio, jd, planet_n, hel_rad, hel_lon, hel_lat
-   planet_steps.radio[i]=hel_rad
-   planet_steps.lon[i]=hel_lon - long_asc_node
-   planet_steps.lat[i]=hel_lat
-   planet_steps.date[i] = jd2ecs(jd)
+   ; calculate positions for all dates
+   helio, jd_dates, i+1, hel_rad, hel_lon, hel_lat
    polrec,hel_rad,hel_lon - long_asc_node,dx,dy,/degrees
-   planet_steps.orbit_x[i] = dx
-   planet_steps.orbit_y[i] = dy
-   ;increment the date for then next loop
-   jd = jd + step_size
+
+   ; fill in orbit structure
+   orbit_steps.date = anytim(jd2ecs(jd_dates),/CCSDS)
+   orbit_steps.radio = hel_rad
+   orbit_steps.lon = hel_lon -long_asc_node
+   orbit_steps.lat = hel_lat
+   orbit_steps.orbit_x = dx
+   orbit_steps.orbit_y = dy
+
+   start_pos = {date:   orbit_steps.date[n_steps/2],   radio:orbit_steps.radio[n_steps/2], $
+                lon:    orbit_steps.lon[n_steps/2],    lat:  orbit_steps.lat[n_steps/2], $
+                orbit_x:orbit_steps.orbit_x[n_steps/2],orbit_y:orbit_steps.orbit_y[n_steps/2]}
+   ; fit orbit to ellipse
+   param = mpfitellipse(orbit_steps.orbit_x, orbit_steps.orbit_y,/tilt,/quiet)
+   ; create structure with values for each planet
+   planet={name:names[i],n:i+1,pos_t0:start_pos, $      ;Name,Number,St_position
+           orbit_steps:orbit_steps,orbit_fit:param, $   ;Orbit points, ellip fit
+           HitOrMiss:0b,pos_thit:start_pos,$            ;Hit or Not!, Pos at t_hit
+           input:inputs,minmaxt:minmaxt}               ;Input values, MinMax hit times
+   
+   ; save all planets in a single structure
+   all_planets=(i eq 0)?planet:[all_planets,planet]
 endfor
 
-;Get parameter values fitting steps to an ellipsis
- param = mpfitellipse(planet_steps.orbit_x, planet_steps.orbit_y,/tilt,/quiet)
+planet = all_planets[planet_n-1]
+return,all_planets[planet_n-1].orbit_fit
 
-planet={n:planet_n,start:start,orbit:planet_steps,param:param}
-return,param
 end
+
+
