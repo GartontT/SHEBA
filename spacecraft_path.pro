@@ -1,6 +1,3 @@
-
-
-
 function plot_sc,spacecraft,over=over,orbit=orbit,points=points,zero=zero,coord=coord,ninety=ninety,_extra=_extra
 
 ; check other variables
@@ -50,6 +47,9 @@ query = "http://msslxv.mssl.ucl.ac.uk:8080/stilts/task/sqlclient?"+$
         ") order by target_obj &ofmt=vot"
 
 query_res = ssw_hio_query(query,/conv)
+
+if query_res[0] eq '' then return,-1
+
 k=0
 max_elements = max(str_hist(query_res.target_obj))
 

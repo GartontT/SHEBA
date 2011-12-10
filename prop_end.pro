@@ -22,7 +22,11 @@ close,/all
 openw,lun,file_output,/get_lun
   printf,lun,"	<div class='Result'> <!-- result box -->"
   hits = where(planets.hitormiss eq 1,nhits)
-  schits = where(spacecraft.hitormiss eq 1,nschits)
+
+if spacecraft[0] ne -1 then  $
+   schits = where(spacecraft.hitormiss eq 1,nschits) $
+   else nschits = 0
+
   if nhits+nschits eq 0 then begin
      printf,lun," <ul> <li> No object is hit </li></ul>"
   endif else begin
@@ -123,14 +127,16 @@ for i=0,n_elements(planet_all)-1 do begin
    t1_out = (planet_all[i].hitormiss eq 0)?'0':planet_all[i].pos_thit.date
    printf,lun,'eta:'+t1_out
 endfor
-for i=0,n_elements(spacecraft_all)-1 do begin
-   printf,lun,'------------------------------'
-   printf,lun,'planet:'+spacecraft_all[i].name
-   printf,lun,'distance:'+string(spacecraft_all[i].pos_t0.radio,format='(F7.3)')
-   printf,lun,'hit:'+ string(spacecraft_all[i].hitormiss,format='(I1)')
-   t1_out = (spacecraft_all[i].hitormiss eq 0)?'0':spacecraft_all[i].pos_thit.date
-   printf,lun,'eta:'+t1_out
-endfor
+if spacecraft_all[0] ne -1 then begin
+   for i=0,n_elements(spacecraft_all)-1 do begin
+      printf,lun,'------------------------------'
+      printf,lun,'planet:'+spacecraft_all[i].name
+      printf,lun,'distance:'+string(spacecraft_all[i].pos_t0.radio,format='(F7.3)')
+      printf,lun,'hit:'+ string(spacecraft_all[i].hitormiss,format='(I1)')
+      t1_out = (spacecraft_all[i].hitormiss eq 0)?'0':spacecraft_all[i].pos_thit.date
+      printf,lun,'eta:'+t1_out
+   endfor
+endif
 close,/all
 
 file_out = path_out+'cme_pm'
@@ -161,25 +167,27 @@ for i = 0,n_elements(planet_all)-1  do begin
               dt1_out_max                                             ; max number of days
    printf,lun,start_str+','+rest_str
 endfor
-for i = 0,n_elements(spacecraft_all)-1  do begin
-   t1_out = (spacecraft_all[i].hitormiss eq 0)?'':spacecraft_all[i].pos_thit.date
-   t1_out_min = (t1_out eq '')?'':spacecraft_all[i].minmaxt.t_min
-   t1_out_max = (t1_out eq '')?'':spacecraft_all[i].minmaxt.t_max
-   dt1_out = (t1_out eq '')?'':string((anytim(spacecraft_all[i].pos_thit.date) - anytim(t0))/(3600.*24.),format='(F7.2)')
-   dt1_out_min = (t1_out eq '')?'':string((anytim(spacecraft_all[i].minmaxt.t_min) - anytim(t0))/(3600.*24.),format='(F7.2)')
-   dt1_out_max = (t1_out eq '')?'':string((anytim(spacecraft_all[i].minmaxt.t_max) - anytim(t0))/(3600.*24.),format='(F7.2)')
+if spacecraft_all ne -1 then begin
+   for i = 0,n_elements(spacecraft_all)-1  do begin
+      t1_out = (spacecraft_all[i].hitormiss eq 0)?'':spacecraft_all[i].pos_thit.date
+      t1_out_min = (t1_out eq '')?'':spacecraft_all[i].minmaxt.t_min
+      t1_out_max = (t1_out eq '')?'':spacecraft_all[i].minmaxt.t_max
+      dt1_out = (t1_out eq '')?'':string((anytim(spacecraft_all[i].pos_thit.date) - anytim(t0))/(3600.*24.),format='(F7.2)')
+      dt1_out_min = (t1_out eq '')?'':string((anytim(spacecraft_all[i].minmaxt.t_min) - anytim(t0))/(3600.*24.),format='(F7.2)')
+      dt1_out_max = (t1_out eq '')?'':string((anytim(spacecraft_all[i].minmaxt.t_max) - anytim(t0))/(3600.*24.),format='(F7.2)')
 
-   rest_str = strupcase(spacecraft_all[i].name) + ',' + $ ; Spacecraft
-              string(spacecraft_all[i].pos_t0.radio,format='(F7.3)') +',' +  $ ; distance
-              string(spacecraft_all[i].hitormiss,format='(I1)') +',' +  $ ; HitOrMiss
-              t1_out +',' + $                                         ; time to reach earth
-              t1_out_min +',' + $                                     ; min time
-              t1_out_max   +',' + $                                   ; max time
-              dt1_out +',' + $                                        ; days to reach earth
-              dt1_out_min +',' + $                                    ; min number of days
-              dt1_out_max                                             ; max number of days
-   printf,lun,start_str+','+rest_str
-endfor
+      rest_str = strupcase(spacecraft_all[i].name) + ',' + $ ; Spacecraft
+                 string(spacecraft_all[i].pos_t0.radio,format='(F7.3)') +',' +  $ ; distance
+                 string(spacecraft_all[i].hitormiss,format='(I1)') +',' +  $ ; HitOrMiss
+                 t1_out +',' + $    ; time to reach earth
+                 t1_out_min +',' + $ ; min time
+                 t1_out_max   +',' + $ ; max time
+                 dt1_out +',' + $      ; days to reach earth
+                 dt1_out_min +',' + $  ; min number of days
+                 dt1_out_max           ; max number of days
+      printf,lun,start_str+','+rest_str
+   endfor
+endif
 close,/all
 
 stilts_command = './stilts tcopy '+file_out+'.csv ifmt=csv '+file_out+'.votable ofmt=votable'

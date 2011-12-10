@@ -37,7 +37,6 @@ angle_arr  = findgen(width*10)/10 - width/2.
 
 longer_rad = sqrt(total(range^2))
 lab_r = where(cme_r le longer_rad,nl)
-lab_r_sc = where((spacecraft.pos_t0.radio le longer_rad) and (spacecraft.pos_t0.radio gt mini) ,nscl)
 lab_r_pl = where((planets.pos_t0.radio le longer_rad) and (planets.pos_t0.radio gt mini),npll)
 
 cme_days = findgen(255)*max(cme_t[lab_r])/255
@@ -98,17 +97,20 @@ for i = 0,npll-1  do begin
 endfor
 
 ;;=================== Plot s/c              ===========
-if nscl gt 0 then begin
+if spacecraft[0] ne -1 then begin
+   lab_r_sc = where((spacecraft.pos_t0.radio le longer_rad) and (spacecraft.pos_t0.radio gt mini) ,nscl)
+   if nscl gt 0 then begin
 ;;=================== Plot s/c starting pos ===========
-   dist=(nscl le 3)?0.05:(0.7-0.45)/nscl
-   for i = 0,nscl-1  do begin
-      scsym, 1.5,thick = 5,rot=posang(90+posang(spacecraft[lab_r_sc[i]].pos_t0.lon))
-      plots,spacecraft[lab_r_sc[i]].pos_t0.orbit_x,spacecraft[lab_r_sc[i]].pos_t0.orbit_y,psym=8,color=spacecraft_colors[lab_r_sc[i]],symsize=syms
-      scsym, 1.5,thick = 5
-      plots,0.03,0.7-i*dist,/normal,psym=8,color=spacecraft_colors[lab_r_sc[i]],symsize=syms
-      xyouts,0.052,(0.7-i*dist)-0.01,spacecraft[lab_r_sc[i]].name,/normal,color=0,Font=ff,charsize=cs
-   endfor
+      dist=(nscl le 3)?0.05:(0.7-0.45)/nscl
+      for i = 0,nscl-1  do begin
+         scsym, 1.5,thick = 5,rot=posang(90+posang(spacecraft[lab_r_sc[i]].pos_t0.lon))
+         plots,spacecraft[lab_r_sc[i]].pos_t0.orbit_x,spacecraft[lab_r_sc[i]].pos_t0.orbit_y,psym=8,color=spacecraft_colors[lab_r_sc[i]],symsize=syms
+         scsym, 1.5,thick = 5
+         plots,0.03,0.7-i*dist,/normal,psym=8,color=spacecraft_colors[lab_r_sc[i]],symsize=syms
+         xyouts,0.052,(0.7-i*dist)-0.01,spacecraft[lab_r_sc[i]].name,/normal,color=0,Font=ff,charsize=cs
+      endfor
 
+   endif
 endif
 background = TVREAD(TRUE=3)
 
