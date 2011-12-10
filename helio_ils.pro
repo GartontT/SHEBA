@@ -1,6 +1,0 @@
-PRO HELIO_ILS, JD, LIST, HRAD, HLONG, HLAT, RADIAN = radian
-
-
-
-
-END
