@@ -99,7 +99,7 @@ ul.tabs li a.active {
     border:1px solid #464c54;  
 }  
 #content_2, #content_3 { display:none; }  
-content ul {  
+.content ul {  
     margin:0px;  
     padding:0px 0px 0px 20px;  
 }  
@@ -111,7 +111,6 @@ content ul {
     font-size:13px;  
 }  
 .content ul li input {  
-/*    color:#8b959c;  */
     font-size:12px;  
     text-transform:uppercase;  
     font-family:Verdana, Arial, Helvetica, sans-serif;  
@@ -148,3 +147,44 @@ content ul {
     background-image:url(../images/exp_sep.png);  
 }  
 
+ul.bottoms {  
+    margin:0px; padding:0px;  
+    margin-top:5px;
+    margin-bottom:6px;
+}  
+ul.bottoms li {  
+    list-style:none;  
+    display:inline;  
+}  
+
+ul.bottoms li a {  
+    background-image:url(../images/tab_off.jpg);  
+    background-repeat:repeat-x;  
+    background-position:bottom;  
+    background-color:#464c54;  
+    color:#ffebb5;  
+    padding:8px 14px 8px 14px;  
+    text-decoration:none;  
+    font-size:9px;  
+    font-family:Verdana, Arial, Helvetica, sans-serif;  
+    font-weight:bold;  
+    text-transform:uppercase;  
+    border:1px solid #464c54;  
+}  
+ul.bottoms li a:hover {  
+    background-color:#2f343a;  
+    border-color:#2f343a;  
+}  
+ul.bottoms li a.activo {  
+    background-image:url(../images/tab_on.jpg);  
+    background-repeat:repeat-x;  
+    background-position:top;  
+    background-color:#ffffff;  
+    color:#282e32;  
+    border:1px solid #464c54;  
+    border-bottom: 0px solid #ffffff;  
+}  
+
+.option {
+}
+#option_2{ display:none;}

@@ -54,6 +54,24 @@
 			$("#explanation_"+number[1]).slideDown();
 		  
 		});
+		// When a link is clicked
+		$("a.bottom").click(function () {
+			
+			
+			// switch all tabs off
+			$(".activo").removeClass("activo");
+			
+			// switch this tab on
+			$(this).addClass("activo");
+			
+			// slide all content up
+			$(".option").slideUp();
+			
+			// slide this content up
+	                var number = $(this).attr("title").split('_');
+			//var content_show = $(this).attr("title");
+	                $("#option_"+number[1]).slideDown();	  
+		});
 	
 	  });
   </script>  
@@ -77,15 +95,55 @@
       </ul>
 
       <div id="content_1" class="content"> 
-	<FORM METHOD=POST ACTION="executeCME.jsp">
-	  <ul>
-	    <li> Start Time <INPUT class="param" TYPE=TEXT NAME=startTime VALUE="2010-01-01T00:00" SIZE=16></li>
-	    <li> Longitude <INPUT class="param" TYPE=TEXT NAME=startPosition VALUE="0" SIZE=3></li>
-	    <li> Width <INPUT class="param" TYPE=TEXT NAME=startAngle VALUE="45" SIZE=3></li>
-	    <li> Speed <INPUT class="param" TYPE=TEXT NAME=startSpeed VALUE="800" SIZE=4> &plusmn; <INPUT class="param" TYPE=TEXT NAME=errorSpeed VALUE="0" SIZE=4></li>
-	    <li> <INPUT TYPE=SUBMIT value="Run Model"> </li> 
+	  <ul class="bottoms"> <!-- sub menu // bottoms-->
+	    <li><a href="#" title="option_1" class="bottom activo">Sun <font size=+0.5>&rarr;</font> Object</a></li>
+	    <li><a href="#" title="option_2" class="bottom">Sun <font size=+0.5>&larr;</font> Object</a></li>
 	  </ul>
-	</FORM>
+	  <div id="option_1" class="option">
+	    <FORM METHOD=POST ACTION="executeCME.jsp">
+	      <ul>
+		<li> Start Time <INPUT class="param" TYPE=TEXT NAME=startTime VALUE="2010-01-01T00:00" SIZE=16></li>
+		<li> Longitude <INPUT class="param" TYPE=TEXT NAME=startPosition VALUE="0" SIZE=3></li>
+		<li> Width <INPUT class="param" TYPE=TEXT NAME=startAngle VALUE="45" SIZE=3></li>
+		<li> Speed <INPUT class="param" TYPE=TEXT NAME=startSpeed VALUE="800" SIZE=4> &plusmn; <INPUT class="param" TYPE=TEXT NAME=errorSpeed VALUE="0" SIZE=4></li>
+		<li> <INPUT TYPE=SUBMIT value="Run Model"> </li> 
+	      </ul>
+	    </FORM>
+	  </div>
+	  <div id="option_2" class="option">
+	    <FORM METHOD=POST ACTION="executeCME.jsp">
+	      <ul>
+		<li> Impact Time <INPUT class="param" TYPE=TEXT NAME=startTime VALUE="2010-01-01T00:00" SIZE=16></li>
+		<li> Object 
+		  <select name="object" size="1">
+		    <option value="Mercury">Mercury</option>
+		    <option value="Venus">Venus</option>
+		    <option selected value="Earth">Earth</option>
+		    <option value="Mars">Mars</option>
+		    <option value="Jupiter">Jupiter</option>
+		    <option value="Saturn">Saturn</option>
+		    <option value="Uranus">Uranus</option>
+		    <option value="Neptune">Neptune</option>
+		    <option value="Pluto">Pluto</option>
+		    <option value="Cassini">Cassini</option>
+		    <option value="Dawn">Dawn</option>
+		    <option value="Galileo">Galileo</option>
+		    <option value="Messenger">Messenger</option>
+		    <option value="NewHorizons">New Horizons</option>
+		    <option value="Rosetta">Rosetta</option>
+		    <option value="StereoA">STEREO A</option>
+		    <option value="StereoB">STEREO B</option>
+		    <option value="Ulysses">Ulysses</option>
+		    <option value="Voyager1">Voyager 1</option>
+		    <option value="Voyager2">Voyager 2</option>
+		  </select>
+		</li>
+		<li> Width <INPUT class="param" TYPE=TEXT NAME=startAngle VALUE="45" SIZE=3></li>
+		<li> Speed <INPUT class="param" TYPE=TEXT NAME=startSpeed VALUE="800" SIZE=4> &plusmn; <INPUT class="param" TYPE=TEXT NAME=errorSpeed VALUE="0" SIZE=4></li>
+		<li> <INPUT TYPE=SUBMIT value="Run Model"> </li> 
+	      </ul>
+	    </FORM>
+	  </div>
       </div>
       <div id="content_2" class="content"> 
 	<FORM METHOD=POST ACTION="executeSW.jsp">
