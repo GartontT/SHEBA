@@ -23,7 +23,7 @@ openw,lun,file_output,/get_lun
   printf,lun,"	<div class='Result'> <!-- result box -->"
   hits = where(planets.hitormiss eq 1,nhits)
 
-if spacecraft[0] ne -1 then  $
+if data_chk(spacecraft,/type) eq 8 then  $
    schits = where(spacecraft.hitormiss eq 1,nschits) $
    else nschits = 0
 
@@ -127,7 +127,7 @@ for i=0,n_elements(planet_all)-1 do begin
    t1_out = (planet_all[i].hitormiss eq 0)?'0':planet_all[i].pos_thit.date
    printf,lun,'eta:'+t1_out
 endfor
-if spacecraft_all[0] ne -1 then begin
+if data_chk(spacecraft_all,/type) eq 8 then begin
    for i=0,n_elements(spacecraft_all)-1 do begin
       printf,lun,'------------------------------'
       printf,lun,'planet:'+spacecraft_all[i].name
@@ -167,7 +167,7 @@ for i = 0,n_elements(planet_all)-1  do begin
               dt1_out_max                                             ; max number of days
    printf,lun,start_str+','+rest_str
 endfor
-if spacecraft_all ne -1 then begin
+if data_chk(spacecraft_all,/type) eq 8 then begin
    for i = 0,n_elements(spacecraft_all)-1  do begin
       t1_out = (spacecraft_all[i].hitormiss eq 0)?'':spacecraft_all[i].pos_thit.date
       t1_out_min = (t1_out eq '')?'':spacecraft_all[i].minmaxt.t_min

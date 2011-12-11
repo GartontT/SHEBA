@@ -18,7 +18,7 @@ cme_hit_object,all_planets,st_time=t_sol,cme_lon=cme_lon,cme_vel=cme_vel,e_vel=e
 
 ;===================================================================
 ;====================  Find if the s/c are hit
-if all_spacecraft[0] ne -1 then $
+if data_chk(all_spacecraft,/type) eq 8 then $
 cme_hit_object,all_spacecraft,st_time=t_sol,cme_lon=cme_lon,cme_vel=cme_vel,e_vel=e_vel,dlong=dlong,cme_val=cme_spacecraft
 
 

@@ -48,7 +48,7 @@ query = "http://msslxv.mssl.ucl.ac.uk:8080/stilts/task/sqlclient?"+$
 
 query_res = ssw_hio_query(query,/conv)
 
-if query_res[0] eq '' then return,-1
+if data_chk(query_res,/type) ne 8 then return,-1
 
 k=0
 max_elements = max(str_hist(query_res.target_obj))

@@ -97,7 +97,7 @@ for i = 0,npll-1  do begin
 endfor
 
 ;;=================== Plot s/c              ===========
-if spacecraft[0] ne -1 then begin
+if data_chk(spacecraft,/type) eq 8 then begin
    lab_r_sc = where((spacecraft.pos_t0.radio le longer_rad) and (spacecraft.pos_t0.radio gt mini) ,nscl)
    if nscl gt 0 then begin
 ;;=================== Plot s/c starting pos ===========
