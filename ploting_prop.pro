@@ -21,7 +21,7 @@ pro plot_prop_part,planets,spacecraft,cme_s,cme_t,cme_r,mini,range,name,file_out
 lon_0 = cme_s[0]
 width = cme_s[1]
 planets_colors=[9,7,5,3,6,2,4,10,9]
-spacecraft_colors=[8,5,3,10,6,4,4,10,5,7]
+spacecraft_colors=[8,5,3,10,6,4,4,10,5,7,3]
 setz
 ; Set plot parameters, positions font and sizes
 position=[0.1,0.1,0.9,0.9]
@@ -134,12 +134,10 @@ pro ploting_prop,planets,spacecraft,cme,cme_s,file_out
 inner_r = [-2.5,2.5]
 outer_r = [-46.5,46.5]
 
-cme_t = 0
-cme_r = 0
-for i=0,(n_elements(cme)/2)-1 do begin
-   cme_t =[cme_t,cme[(i*2)]]
-   cme_r =[cme_r,cme[(i*2)+1]]
-endfor
+lab_t = indgen(n_elements(cme)/2)*2
+lab_r = indgen(n_elements(cme)/2)*2+1
+cme_t = cme[lab_t]
+cme_r = cme[lab_r]
 
 plot_prop_part,planets,spacecraft,cme_s,cme_t,cme_r,0,inner_r,'inner',file_out
 
