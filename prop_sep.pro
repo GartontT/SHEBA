@@ -18,7 +18,7 @@ theta_spiral = theta_sp + sw_lon
 
 ;; Plot properties
 set_plot,'z'
-loadct,0,/silent
+loadct,0,/silent 
 set_line_color
 Device, Set_Resolution=[2400, 2400]
 ;window,15,xsize=600, ysize=600
@@ -41,11 +41,11 @@ circle_sym, thick = 2, /fill
 
 ;; Plot planets (and orbit)
 ;;; depending of range => plot the planets with smaller radius
-in_range = (range[1] lt 3)?where(planets.start.radio lt range[1],n_inr):where((planets.start.radio lt range[1]) and (planets.start.radio gt 3),n_inr)
+in_range = (range[1] lt 3)?where(planets.pos_t0.radio lt range[1],n_inr):where((planets.pos_t0.radio lt range[1]) and (planets.pos_t0.radio gt 3),n_inr)
 
 for i=0,n_inr-1 do begin
       pp=plot_orbit(planets[in_range[i]],/orbit,/over,color=200,thick=5)
-      plots,planets[in_range[i]].start.orbit_x,planets[in_range[i]].start.orbit_y,psym=8,color=planets_colors[planets[in_range[i]].n-1],symsize=syms
+      plots,planets[in_range[i]].pos_t0.orbit_x,planets[in_range[i]].pos_t0.orbit_y,psym=8,color=planets_colors[planets[in_range[i]].n-1],symsize=syms
 endfor
 
 
@@ -55,7 +55,7 @@ hit = where(planets[in_range].hit.hitormiss eq 1,n_hit)
 for i=n_hit-1,0,-1 do begin
    vel_n_w =   planets[in_range[hit[i]]].hit.swvel * (24. * 60. * 60.) / 150e6
    new_r_spiral = -( vel_n_w / rot_sun) * theta_sp
-   lab_dist = where(new_r_spiral le planets[in_range[hit[i]]].start.radio)
+   lab_dist = where(new_r_spiral le planets[in_range[hit[i]]].pos_t0.radio)
    polrec,new_r_spiral[lab_dist],theta_spiral[lab_dist],spir_x,spir_y,/degrees
    oplot,spir_x,spir_y,color=planets_colors[planets[in_range[hit[i]]].n-1],thick=4
 endfor
@@ -109,7 +109,7 @@ for i = 0,8  do begin
    dt=(planets[i].hit.eta eq 0)?'':string(planets[i].hit.eta,format='(I7)')
    swvel=(planets[i].hit.swvel eq 0)?'':string(planets[i].hit.swvel,format='(F7.2)') 
    rest_str = planet_name[planets[i].n-1] + ',' + $ ; Planet
-              string(planets[i].start.radio,format='(F7.3)') +',' +  $ ; distance
+              string(planets[i].pos_t0.radio,format='(F7.3)') +',' +  $ ; distance
               string(planets[i].hit.hitormiss,format='(I1)') +',' +  $ ; HitOrMiss
               swvel+',' + $                                            ; velocity stimated
               planets[i].hit.date +','+$                               ; time of arrival
@@ -204,8 +204,15 @@ if ~keyword_set(e_vel) then e_vel=0 ;km/s
 if ~keyword_set(beta) then beta = 0.9
 part_speed=beta ;c times! relativistic particles
 
+
+;===================================================================
+;====================  Obtain properties of planets and spacecraft
+ellip = planet_orbit(t0,3,planet=earth,all_planets=all_planets)
+all_spacecraft  = spacecraft_path(t0,drange=1)
+
+
 ;; 1 Calculate the spiral with the input values.
-vel_wind=abs(vel)+[-e_vel,+e_vel]
+vel_wind=abs(vel)+[-1,1]*e_vel
 vel_wind_au = ( vel_wind / 150e6 ) * 24. * 60. * 60. ; AU per day
 rot_sun =  14.4                                      ; rotation rate of the Sun in degrees per day
 theta_sp = -findgen( 360 * 6. )                  ;
@@ -226,21 +233,21 @@ jd = jd_struct.int + jd_struct.frac
 ;; ---- Calculating values for each planet
 for i=1,9 do begin
    ;; ---- defining structures
-   start = {date:'',radio:0.,lon:0.,lat:0.,orbit_x:0.,orbit_y:0.}
+   pos_t0 = {date:'',radio:0.,lon:0.,lat:0.,orbit_x:0.,orbit_y:0.}
    hit = {hitormiss:0b,eta:0.,date:'',swvel:0.,partvel:0.,dist:0.}
    input={date:anytim(t0,/ccs),long_hg:x0,long_hci:sw_lon,vel:vel,e_vel:e_vel}
-   planet = {n:0,name:'',start:start,hit:hit,input:input}
+   planet = {n:0,name:'',pos_t0:pos_t0,hit:hit,input:input}
 
    planet.n = i
    ;; ---- Position
    helio, jd, i, hel_rad, hel_lon, hel_lat
    polrec,hel_rad,hel_lon - long_asc_node,dx,dy,/degrees
-   planet.start.date = t0
-   planet.start.radio = hel_rad
-   planet.start.lon = (hel_lon - long_asc_node + 360) mod 360
-   planet.start.lat = hel_lat
-   planet.start.orbit_x = dx
-   planet.start.orbit_y = dy
+   planet.pos_t0.date = t0
+   planet.pos_t0.radio = hel_rad
+   planet.pos_t0.lon = (hel_lon - long_asc_node + 360) mod 360
+   planet.pos_t0.lat = hel_lat
+   planet.pos_t0.orbit_x = dx
+   planet.pos_t0.orbit_y = dy
 
    ;; ---- HitOrMiss?
    for j=0,1 do begin
@@ -256,28 +263,28 @@ for i=1,9 do begin
 ;      pos_ang = pos_ang mod 360
 ;      if ((pos_ang[0] lt 0) or (pos_ang[1] lt 0)) then pos_ang = pos_ang + 360
 ;      hitormiss = angleinrange(mean(pos_ang),max(pos_ang)-min(pos_ang),planet.start.lon)
-      hitormiss = angleinrange2(planet.start.lon,pos_ang)
+      hitormiss = angleinrange2(planet.pos_t0.lon,pos_ang)
       ; TODO: Fix problem with  far orbits and angles!!
       ; example Neptune! with this input 2011-10-19T23:11:05.000, 50.00,  0.13, 500.00,
-      print, i,' ',pos_ang,' ',planet.start.lon,' ',sw_lon,' ',abs(planet.start.lon-sw_lon),' ',hitormiss
+      print, i,' ',pos_ang,' ',planet.pos_t0.lon,' ',sw_lon,' ',abs(planet.pos_t0.lon-sw_lon),' ',hitormiss
       if hitormiss eq 1 then begin
          vel_n_w = 0;(planet.start.radio*rot_sun)/(abs(planet.start.lon-sw_lon)+(mm*360.))
          mm = 0.
          while not ((vel_n_w ge vel_wind_au[0]) and (vel_n_w le vel_wind_au[1])) do begin
-            vel_n_w = abs(-(planet.start.radio*rot_sun)/(abs(planet.start.lon-sw_lon)-(mm*360.)))
+            vel_n_w = abs(-(planet.pos_t0.radio*rot_sun)/(abs(planet.pos_t0.lon-sw_lon)-(mm*360.)))
             mm = mm + 1.
             if mm gt 100 then goto,break_while
             print, i, mm, vel_n_w, vel_wind_au[0],vel_wind_au[1]
          endwhile
          planet.hit.swvel = vel_n_w * 150e6 /(24. * 60. * 60.)   ; km/s
          new_r_spiral = -( vel_n_w / rot_sun) * theta_sp
-         lab_dist = where(new_r_spiral le planet.start.radio,tt)
+         lab_dist = where(new_r_spiral le planet.pos_t0.radio,tt)
          dist_SEspiral = arcdist(new_r_spiral[lab_dist],theta_sp[lab_dist])
          planet.hit.partvel = part_speed
          planet.hit.dist = dist_SEspiral
          planet.hit.eta = dist_SEspiral*500./part_speed  ; (1 AU = 150e6 km)/(c = 3e5 km/s) = 500 s.
          planet.hit.date = anytim(anytim(t0)+planet.hit.eta,/ccs)
-         print,planet.n,' ',planet.hit.eta,' ',planet.hit.date,' ',planet.hit.swvel,' ',planet.start.radio,' ',planet.hit.dist,' '
+         print,planet.n,' ',planet.hit.eta,' ',planet.hit.date,' ',planet.hit.swvel,' ',planet.pos_t0.radio,' ',planet.hit.dist,' '
       endif
       planet.hit.hitormiss=hitormiss
       print,'while not broken'

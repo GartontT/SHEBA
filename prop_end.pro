@@ -108,7 +108,7 @@ planet_name = ['MERCURY','VENUS','EARTH','MARS','JUPITER','SATURN','URANUS','NEP
 x_sol = [x0,0]
 cme_prop_sp,planets_str=planet_all,spacecraft_str=spacecraft_all,x_sol=x_sol,t_sol=t0,cme_vel=vel,dlong=width,cme_val=cme_all,e_vel=e_vel
 
-ploting_prop,planet_all,spacecraft_all,cme_all,[long_hgihg(x_sol[0],/hg,date=t0),width],path_out
+ploting_prop,planet_all,spacecraft_all,path_out,/plot_cme,cme_val=cme_all,cme_s=[long_hgihg(x_sol[0],/hg,date=t0),width]
 
 file_out = path_out+'output'
 ;writing out the info

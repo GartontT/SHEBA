@@ -1,7 +1,7 @@
 pro spacecraft_hit,spacecraft_str,st_time=st_time,cme_lon=cme_lon,cme_vel=cme_vel,e_vel=e_vel,dlong=dlong,cme_val=cme_val
 
 time_diff = (anytim(spacecraft_str.orbit_steps.date)-anytim(st_time))
-spacecraft_exist = (min(time_diff) lt 2*3600*24)?1b:0b
+spacecraft_exist = (min(time_diff) lt 2*3600*24.)?1b:0b
 
 if spacecraft_exist then begin
 ;===================================================================
