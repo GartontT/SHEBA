@@ -9,21 +9,21 @@ cme_lon = long_hgihg(x_sol[0],/hg,date=t_sol) ;degrees
 
 ;===================================================================
 ;====================  Obtain properties of planets and spacecraft
-ellip = planet_orbit(t_sol,3,planet=earth,all_planets=all_planets)
-all_spacecraft  = spacecraft_path(t_sol,drange=300)
+;ellip = planet_orbit(t_sol,3,planet=earth,all_planets=all_planets)
+;all_spacecraft  = spacecraft_path(t_sol,drange=300)
 
 ;===================================================================
 ;====================  Find if the planets are hit
-cme_hit_object,all_planets,st_time=t_sol,cme_lon=cme_lon,cme_vel=cme_vel,e_vel=e_vel,dlong=dlong,cme_val=cme_planets
+cme_hit_object,planets_str,st_time=t_sol,cme_lon=cme_lon,cme_vel=cme_vel,e_vel=e_vel,dlong=dlong,cme_val=cme_planets
 
 ;===================================================================
 ;====================  Find if the s/c are hit
-if data_chk(all_spacecraft,/type) eq 8 then $
-cme_hit_object,all_spacecraft,st_time=t_sol,cme_lon=cme_lon,cme_vel=cme_vel,e_vel=e_vel,dlong=dlong,cme_val=cme_spacecraft
+if data_chk(spacecraft_str,/type) eq 8 then $
+cme_hit_object,spacecraft_str,st_time=t_sol,cme_lon=cme_lon,cme_vel=cme_vel,e_vel=e_vel,dlong=dlong,cme_val=cme_spacecraft
 
 
 cme_val = (n_elements(cme_spacecraft) gt 0)?[cme_planets,cme_spacecraft]:cme_planets
-planets_str = all_planets
-spacecraft_str = all_spacecraft
+;planets_str = all_planets
+;spacecraft_str = all_spacecraft
 ;....
 end

@@ -23,5 +23,5 @@ if nspacecraft ne 0 then $
 if n_elements(cme_lon) eq 0 then $
    prop_end_back,t0=t0,width=width,vel=vel,e_vel=e_vel,PATH_OUT=PATH_OUT $
 else $
-   prop_end,t0=t_sun,x0=cme_lon,width=width,vel=vel,e_vel=e_vel,PATH_OUT=PATH_OUT
+   sheba_run,model='cme',time_sol=t_sun,x0=cme_lon,width=width,vel=vel,e_vel=e_vel,PATH_OUT=PATH_OUT
 end
