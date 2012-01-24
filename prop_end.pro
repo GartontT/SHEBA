@@ -196,6 +196,10 @@ if ~keyword_set(e_vel) then e_vel=0 ;km/s
 if ~keyword_set(path_out) then path_out = '/tmp/'
 
 planet_name = ['MERCURY','VENUS','EARTH','MARS','JUPITER','SATURN','URANUS','NEPTUNE','PLUTO']
+;===================================================================
+;====================  Obtain properties of planets and spacecraft if they are not input.
+if data_chk(planets_str,/type) ne 8 then ellip = planet_orbit(t0,3,planet=earth,all_planets=planets_str)
+if data_chk(spacecraft_str,/type) ne 8 then spacecraft_str  = spacecraft_path(t0,drange=300)
 
 x_sol = [x0,0]
 cme_prop_sp,planets_str=planets_str,spacecraft_str=spacecraft_str,x_sol=x_sol,t_sol=t0,cme_vel=vel,dlong=width,cme_val=cme_all,e_vel=e_vel
