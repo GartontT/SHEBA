@@ -48,7 +48,10 @@ jd_date = jd_struct.int + jd_struct.frac
 
 year = (strsplit(anytim(date,/ecs),'/',/extract))[0]
 long_asc_node = 74+(22.+((year-1900)*.84))/60.
-inputs = {st_time:'', st_long:0., st_long_hci:0.,width:0., cme_vel:0., cme_vel_e: 0.}
+inputs = {st_time:'', st_long:0., st_long_hci:0.,width:0., $
+          cme_vel:0., cme_vel_e: 0., $
+          sw_vel:0., sw_vel_e: 0., $
+          beta:0.}
 minmaxt = {t_min:'', t_max:''}
 
 ; calculate each parameter for each planet
@@ -72,12 +75,16 @@ for i=0,8 do begin
    start_pos = {date:   orbit_steps.date[n_steps/2],   radio:orbit_steps.radio[n_steps/2], $
                 lon:    orbit_steps.lon[n_steps/2],    lat:  orbit_steps.lat[n_steps/2], $
                 orbit_x:orbit_steps.orbit_x[n_steps/2],orbit_y:orbit_steps.orbit_y[n_steps/2]}
-   ; fit orbit to ellipse
+   pos_thit  = {date:   orbit_steps.date[n_steps/2],   radio:orbit_steps.radio[n_steps/2], $
+                lon:    orbit_steps.lon[n_steps/2],    lat:  orbit_steps.lat[n_steps/2], $
+                orbit_x:orbit_steps.orbit_x[n_steps/2],orbit_y:orbit_steps.orbit_y[n_steps/2], $
+                sw_vel:0. , sw_vel_au:0., spiral_angle:0., spiral_dist: 0., delta_time: 0.}
+  ; fit orbit to ellipse
    param = mpfitellipse(orbit_steps.orbit_x, orbit_steps.orbit_y,/tilt,/quiet)
    ; create structure with values for each planet
    planet={name:names[i],n:i+1,pos_t0:start_pos, $      ;Name,Number,St_position
            orbit_steps:orbit_steps,orbit_fit:param, $   ;Orbit points, ellip fit
-           HitOrMiss:0b,pos_thit:start_pos,$            ;Hit or Not!, Pos at t_hit
+           HitOrMiss:0b,pos_thit:pos_thit,$ ;Hit or Not!, Pos at t_hit,
            input:inputs,minmaxt:minmaxt}               ;Input values, MinMax hit times
    
    ; save all planets in a single structure

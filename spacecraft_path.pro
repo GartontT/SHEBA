@@ -34,7 +34,10 @@ spacecrafts=['Ulysses','StereoA','StereoB','Messenger',$
 days = (n_elements(drange) eq 0)?30:drange
 time_range=anytim(anytim(date)+([0,1]*(3600*24.*days)),/CCSDS)
 
-inputs = {st_time:'', st_long:0., st_long_hci:0.,width:0., cme_vel:0., cme_vel_e: 0.}
+inputs = {st_time:'', st_long:0., st_long_hci:0.,width:0.,$
+          cme_vel:0., cme_vel_e: 0., $
+          sw_vel:0., sw_vel_e: 0., $
+          beta:0.}
 minmaxt = {t_min:'', t_max:''}
 
 query = "http://msslxv.mssl.ucl.ac.uk:8080/stilts/task/sqlclient?"+$
@@ -74,8 +77,11 @@ for i = 0,n_elements(spacecrafts)-1 do begin
       st_time = min(time_diff,st_pos)
       start_pos = {date: dates[st_pos], radio: radio[st_pos], lon: long[st_pos],$
                    lat: lat[st_pos], orbit_x: dx[st_pos], orbit_y: dy[st_pos]}
+      pos_thit = {date: dates[st_pos], radio: radio[st_pos], lon: long[st_pos],$
+                   lat: lat[st_pos], orbit_x: dx[st_pos], orbit_y: dy[st_pos], $
+                   sw_vel:0. , sw_vel_au:0., spiral_angle:0., spiral_dist: 0., delta_time: 0.}
       spacecraft = {name:spacecrafts[i],pos_t0:start_pos,orbit_steps:orbit_steps,$
-                    hitOrmiss:0b,pos_thit:start_pos,input:inputs,minmaxt:minmaxt}
+                    hitOrmiss:0b,pos_thit:pos_thit,input:inputs,minmaxt:minmaxt}
       all_spacecrafts = (k eq 1)?spacecraft:[all_spacecrafts,spacecraft]
    endif
 endfor

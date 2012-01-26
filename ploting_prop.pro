@@ -1,33 +1,46 @@
-function posang,ang
-  ang = ang mod 360
-  posang = ang
-  if ang lt 0 then posang=ang+360
-return,posang
+function plot_sep,planets,spacecraft,longer_rad=longer_rad,_extra=_extra
+planets_colors=[9,7,5,3,6,2,4,10,9]
+spacecraft_colors=[8,5,3,10,6,4,4,10,5,7,3]
+;;=================== Plot Sun ===================
+  plot,[0,0],[0,0],psym=3,_extra=_extra
+
+ rot_sun =  14.4 
+ vel_wind = planets[0].input.sw_vel +[-1,1]*planets[0].input.sw_vel_e
+ sw_lon = planets[0].input.st_long_hci
+
+ ;; Define solar wind spiral
+ v_plot = (vel_wind[1] eq vel_wind[0])?vel_wind[0]:findgen(fix(vel_wind[1]-vel_wind[0]))+vel_wind[0]
+ v_au_plot =  ( v_plot / 150e6 ) * 24. * 60. * 60.
+ theta_sp = -findgen( 360 * 6. )                  ;
+ r_plot = -( v_au_plot / rot_sun ) # theta_sp ; 2 dimension [(vel-e,vel+e),radius]
+ theta_spiral = theta_sp + sw_lon
+ for i=0,n_elements(v_plot)-1 do begin
+    polrec,r_plot[i,*],theta_spiral,spir_x,spir_y,/degrees
+    oplot,spir_x,spir_y,color=150 ;,thick=1
+ endfor
+
+ object_struct = ['planets','spacecraft']
+ for j=0,1 do begin
+    a = execute('objects = '+object_struct[j])
+    colors = (j eq 0)?planets_colors:spacecraft_colors
+    hit_objects = where(objects.hitormiss,n_objects)
+    if n_objects gt 0 then begin
+       for i=0,n_objects-1 do begin
+          if objects[hit_objects[i]].pos_thit.radio lt longer_rad then begin
+             theta_sp = -findgen(2*objects[hit_objects[i]].pos_thit.spiral_angle)/2.
+             spiral = -(objects[hit_objects[i]].pos_thit.sw_vel_au/rot_sun) * theta_sp
+             theta_sp = theta_sp + sw_lon
+             polrec,spiral,theta_sp,spir_x,spir_y,/degrees
+             oplot,spir_x,spir_y,color=colors[hit_objects[i]],thick=4
+          endif
+       endfor
+    endif
+ endfor 
+
+ foreground = TVREAD(TRUE=3)
+ return,foreground
 end
-;; function plot_sep,sep_str,_extra=_extra
-;; ;;=================== Plot Sun ===================
-;; plot,[0,0],[0,0],psym=3,_extra=_extra
 
-;; rot_sun =  14.4 
-;; vel_wind = sep_str.vel +[-1,1]*sep_str.e_vel
-;; sw_lon = sep_str.long_hci
-
-;; ;; Define solar wind spiral
-;; v_plot = (vel_wind[1] eq vel_wind[0])?vel_wind[0]:findgen(fix(vel_wind[1]-vel_wind[0]))+vel_wind[0]
-;; v_au_plot =  ( v_plot / 150e6 ) * 24. * 60. * 60.
-;; theta_sp = -findgen( 360 * 6. )                  ;
-;; r_plot = -( v_au_plot / rot_sun ) # theta_sp ; 2 dimension [(vel-e,vel+e),radius]
-;; theta_spiral = theta_sp + sw_lon
-;; for i=0,n_elements(v_plot)-1 do begin
-;;    polrec,r_plot[i,*],theta_spiral,spir_x,spir_y,/degrees
-;;    oplot,spir_x,spir_y,color=150 ;,thick=1
-;; endfor
-
-
-
-
-;; return,foreground
-;; end
 function plot_cme,cme_str,longer_rad=longer_rad,bar_font=bar_font,bar_charsize=bar_charsize,_extra=_extra
 ;;=================== Plot Sun ===================
 plot,[0,0],[0,0],psym=3,_extra=_extra
@@ -51,22 +64,26 @@ color_bar,cme_days,.1,0.9,0.87,0.93,/normal,bottom=min(color)+1,color=0,/above,t
 foreground = TVREAD(TRUE=3)
 return,foreground
 end
-pro setz
+pro setz,plot_cme=plot_cme,plot_sep=plot_sep
   set_plot,'z'
-  loadct,0,/silent
-  COMBINE_COLORS,/LOWER	
-  loadct,5,/silent
-  COMBINE_COLORS
+  if keyword_set(plot_cme) then begin
+     loadct,0,/silent
+     COMBINE_COLORS,/LOWER	
+     loadct,5,/silent
+     COMBINE_COLORS
+  endif
+  if keyword_set(plot_sep) then loadct,0,/silent
   set_line_color
   Device, Set_Resolution=[2400, 2400]
   ;window,15,xsize=600, ysize=600
   !p.background = 255
 end
-pro plot_prop_part,planets,spacecraft,mini,range,name,file_out,cme_str=cme_str
+pro plot_prop_part,planets,spacecraft,mini,range,name,file_out,cme_str=cme_str,plot_sep=plot_sep,plot_cme=plot_cme,model=model
+
 planets_colors=[9,7,5,3,6,2,4,10,9]
 spacecraft_colors=[8,5,3,10,6,4,4,10,5,7,3]
 
-setz   ;TODO: Unsetz
+setz,plot_sep=plot_sep,plot_cme=plot_cme   ;TODO: Unsetz
 
 ; Set plot parameters, positions font and sizes
 position=[0.1,0.1,0.9,0.9]
@@ -83,7 +100,8 @@ lab_r_pl = where((planets.pos_t0.radio le longer_rad) and (planets.pos_t0.radio 
 
 if data_chk(cme_str,/type) eq 8 then $
    foreground = plot_cme(cme_str,longer_rad=longer_rad,xrange=range,yrange=range,xstyle=5,ystyle=5,position=position,bar_Font=ff, bar_Charsize=cs)
-
+if keyword_set(plot_sep) then $
+   foreground = plot_sep(planets,spacecraft,longer_rad=longer_rad,xrange=range,yrange=range,xstyle=5,ystyle=5,position=position)
 
 ;;=======================================================
 ;;=================== Plot Planets ======================
@@ -153,16 +171,17 @@ write_png,file_out+'_'+name+'_bg.png',a
 spawn,'convert '+file_out+'_'+name+'_bg.png -fuzz 05% -transparent white '+file_out+'_'+name+'_bg_tr.png'
 spawn,'convert '+file_out+'_'+name+'_fg.png -fuzz 05% -transparent white '+file_out+'_'+name+'_fg_tr.png'
 spawn,'composite -dissolve 100 -gravity center '+ file_out+'_'+name+'_bg_tr.png '+file_out+'_'+name+'_fg_tr.png '+file_out+'_'+name+'_b.png'
-spawn,'convert '+file_out+'_'+name+'_b.png -background white -flatten '+file_out+'cme_pm_'+name+'.png'
+spawn,'convert '+file_out+'_'+name+'_b.png -background white -flatten '+file_out+model+'_pm_'+name+'.png'
 spawn,'rm '+file_out+'_'+name+'_[fg,bg,b]*.png'
 
 
 end
 
-pro ploting_prop,planets,spacecraft,file_out,plot_cme=plot_cme,cme_val=cme_val,cme_s=cme_s
+pro ploting_prop,planets,spacecraft,file_out,plot_cme=plot_cme,cme_val=cme_val,cme_s=cme_s,plot_sep=plot_sep,model=model
 ;print,'lon_0 = '+string(lon_0)
 inner_r = [-2.5,2.5]
 outer_r = [-46.5,46.5]
+voyag_r = [-100,100]
 
 if keyword_set(plot_cme) then begin
    lab_t = indgen(n_elements(cme_val)/2)*2
@@ -171,6 +190,8 @@ if keyword_set(plot_cme) then begin
    cme_r = cme_val[lab_r]
    cme_str = {lon:cme_s[0], width:cme_s[1],cme_r:cme_r, cme_t:cme_t}
 endif
+
+
 ;; if keyword_set(plot_sep) then begin
 ;;    planet_hit = where(planets.hit.hitormiss eq 1,nplhit)
 ;;    spacecrfat_hit = where(spacecraft.hit.hitormiss eq 1, nschit)
@@ -183,8 +204,8 @@ endif
 ;;    cme_str = {lon:cme_s[0], width:cme_s[1],cme_r:cme_r, cme_t:cme_t}
 ;; endif
 
-plot_prop_part,planets,spacecraft,0,inner_r,'inner',file_out,cme_str=cme_str
-plot_prop_part,planets,spacecraft,sqrt(total(inner_r^2)),outer_r,'outer',file_out,cme_str=cme_str
-plot_prop_part,planets,spacecraft,30,[-100,100],'voyag',file_out,cme_str=cme_str
+plot_prop_part,planets,spacecraft,0,inner_r,'inner',file_out,plot_cme=plot_cme,cme_str=cme_str,plot_sep=plot_sep,model=model
+plot_prop_part,planets,spacecraft,sqrt(total(inner_r^2)),outer_r,'outer',file_out,plot_cme=plot_cme,cme_str=cme_str,plot_sep=plot_sep,model=model
+plot_prop_part,planets,spacecraft,30,voyag_r,'voyag',file_out,plot_cme=plot_cme,cme_str=cme_str,plot_sep=plot_sep,model=model
 
 end

@@ -1,4 +1,4 @@
-pro planet_hit,planet_str,st_time=st_time,cme_lon=cme_lon,cme_vel=cme_vel,e_vel=e_vel,dlong=dlong,cme_val=cme_val
+pro cme_planet_hit,planet_str,st_time=st_time,cme_lon=cme_lon,cme_vel=cme_vel,e_vel=e_vel,dlong=dlong,cme_val=cme_val
 
 ;===================================================================
 ;====================  Find where the CME intersect the planet orbit

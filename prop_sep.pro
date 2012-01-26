@@ -193,16 +193,16 @@ spawn,join_all
 delete_midfiles = 'rm '+file_input+' '+file_output+' '+file_cxs 
 spawn,delete_midfiles
 end
-pro prop_sep,planets_str=planets_str, spacecraft_str=spacecraft_str,beta=beta,t0=t0,x0=x0,vel=vel,e_vel=e_vel,PATH_OUT=path_out
-
-if ~keyword_set(path_out) then path_out='/tmp/'
+pro prop_sep,planets_str=planets_str, spacecraft_str=spacecraft_str,beta=beta,t0=t0,x0=x0,vel=vel,e_vel=e_vel,PATH_OUT=PATH_OUT
+print,t0
+if ~keyword_set(path_out) then path_out='/tmp/sep_'+string(strcompress(t0,/remove_all))
 if ~keyword_set(t0) then t0 = anytim(systim(),/ccs) else t0=anytim(t0,/ccs)
 if ~keyword_set(x0) then x0=[0]; lon-lat HG
 if ~keyword_set(vel) then vel=400 ;km/s
 if ~keyword_set(e_vel) then e_vel=0 ;km/s
 ;if ~keyword_set(file_out) then file_out = '/tmp/prop_'+string(strcompress(t0,/remove_all))
 if ~keyword_set(beta) then beta = 0.9
-part_speed=beta ;c times! relativistic particles
+beta=abs(beta) ;c times! relativistic particles
 
 ;===================================================================
 ;====================  Obtain properties of planets and spacecraft if they are not input.
@@ -211,36 +211,15 @@ if data_chk(spacecraft_str,/type) ne 8 then spacecraft_str  = spacecraft_path(t0
 
 sep_prop_sp,x0=x0,t0=t0,vel=vel,e_vel=e_vel,beta=beta,planets_str=planets_str,spacecraft_str=spacecraft_str
 
-;;      if hitormiss eq 1 then begin
-;;         vel_n_w = 0;(planet.start.radio*rot_sun)/(abs(planet.start.lon-sw_lon)+(mm*360.))
-;;         mm = 0.
-;;         while not ((vel_n_w ge vel_wind_au[0]) and (vel_n_w le vel_wind_au[1])) do begin
-;;            vel_n_w = abs(-(planet.pos_t0.radio*rot_sun)/(abs(planet.pos_t0.lon-sw_lon)-(mm*360.)))
-;;            mm = mm + 1.
-;;            if mm gt 100 then goto,break_while
-;;            print, i, mm, vel_n_w, vel_wind_au[0],vel_wind_au[1]
-;;         endwhile
-;;         planet.hit.swvel = vel_n_w * 150e6 /(24. * 60. * 60.)   ; km/s
-;;         new_r_spiral = -( vel_n_w / rot_sun) * theta_sp
-;;         lab_dist = where(new_r_spiral le planet.pos_t0.radio,tt)
-;;         dist_SEspiral = arcdist(new_r_spiral[lab_dist],theta_sp[lab_dist])
-;;         planet.hit.partvel = part_speed
-;;         planet.hit.dist = dist_SEspiral
-;;         planet.hit.eta = dist_SEspiral*500./part_speed  ; (1 AU = 150e6 km)/(c = 3e5 km/s) = 500 s.
-;;         planet.hit.date = anytim(anytim(t0)+planet.hit.eta,/ccs)
-;;         print,planet.n,' ',planet.hit.eta,' ',planet.hit.date,' ',planet.hit.swvel,' ',planet.pos_t0.radio,' ',planet.hit.dist,' '
-;;      endif
-;;      planet.hit.hitormiss=hitormiss
-;;      print,'while not broken'
-;;      break_while: 
-;;   endif
-;;   planet_all = (i eq 1)?planet:[planet_all,planet]
-;;endfor
-stop
+ploting_prop,planets_str,spacecraft_str,path_out,/plot_sep,model='sep'
+
+writing_prop_out,planets_str,spacecraft_str,path_out,model='sep'
+
+;stop
 ;TODO: add paths to the outputs
-ploting_sep,planet_all,range=2.5,file_out=path_out+'sep_pm_inner'
-ploting_sep,planet_all,range=46.5,file_out=path_out+'sep_pm_outer'
-tables_sep,planet_all,file_out=path_out+'sep_pm',/votable
-web_sep,planet_all,file_out=path_out+'index.html'
+;ploting_sep,planets=planets_str,spacecraft=spacececraft_str,range=2.5,file_out=path_out+'sep_pm_inner'
+;ploting_sep,planets=planets_str,spacecraft=spacececraft_str,arange=46.5,file_out=path_out+'sep_pm_outer'
+;tables_sep,planet_all,file_out=path_out+'sep_pm',/votable
+;web_sep,planet_all,file_out=path_out+'index.html'
 
 end

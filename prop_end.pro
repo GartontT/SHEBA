@@ -94,7 +94,7 @@ end
 
 
 
-pro writing_prop_out,planet_all,spacecraft_all,path_out,x0,t0,width,vel,e_vel
+pro writing_prop_out_BAD,planet_all,spacecraft_all,path_out,x0,t0,width,vel,e_vel
 
 file_out = path_out+'output'
 ;writing out the info
@@ -193,7 +193,7 @@ if (n_elements(x0) eq 0) then x0=[0]; lon-lat HGI
 if (n_elements(width) eq 0) then width=45 ; width in deg
 if ~keyword_set(vel) then vel=800 ;km/s
 if ~keyword_set(e_vel) then e_vel=0 ;km/s
-if ~keyword_set(path_out) then path_out = '/tmp/'
+if ~keyword_set(path_out) then path_out = '/tmp/cme_'+string(strcompress(t0,/remove_all))
 
 planet_name = ['MERCURY','VENUS','EARTH','MARS','JUPITER','SATURN','URANUS','NEPTUNE','PLUTO']
 ;===================================================================
@@ -204,8 +204,9 @@ if data_chk(spacecraft_str,/type) ne 8 then spacecraft_str  = spacecraft_path(t0
 x_sol = [x0,0]
 cme_prop_sp,planets_str=planets_str,spacecraft_str=spacecraft_str,x_sol=x_sol,t_sol=t0,cme_vel=vel,dlong=width,cme_val=cme_all,e_vel=e_vel
 
-ploting_prop,planets_str,spacecraft_str,path_out,/plot_cme,cme_val=cme_all,cme_s=[long_hgihg(x_sol[0],/hg,date=t0),width]
+ploting_prop,planets_str,spacecraft_str,path_out,/plot_cme,cme_val=cme_all,cme_s=[long_hgihg(x_sol[0],/hg,date=t0),width],model='cme'
 
-writing_prop_out,planets_str,spacecraft_str,path_out,x0,t0,width,vel,e_vel
+writing_prop_out,planets_str,spacecraft_str,path_out,model='cme'
+;writing_prop_out,planets_str,spacecraft_str,path_out,x0,t0,width,vel,e_vel
 
 end

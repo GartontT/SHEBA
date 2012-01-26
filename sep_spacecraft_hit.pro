@@ -42,14 +42,14 @@ diff_angle = posang(spacecraft_str.input.st_long_hci - spacecraft_str.pos_thit.l
 vel_2hitSC = (spacecraft_str.pos_thit.radio) * rot_sun / diff_angle
 
 while vel_2hitSC gt max(vel_wind_au) do begin
-   print,'t '+string(vel_2hitSC)
    diff_angle = diff_angle + 360
    vel_2hitSC = (spacecraft_str.pos_thit.radio) * rot_sun / diff_angle
-
 endwhile
 
-print, diff_angle, vel_2hitSC,vel_wind_au;, vel_2hitPlanet*150e6/24./60./60.,vel_wind_au*150e6/24./60./60.
-spacecraft_str.sw_thit = vel_2hitSC
+spacecraft_str.pos_thit.spiral_angle = diff_angle
+spacecraft_str.pos_thit.sw_vel_au = vel_2hitSC
+spacecraft_str.pos_thit.sw_vel = vel_2hitSC * 150e6 / (24.*60.*60.)
+
 
 ;===================================================================
 ;====================== Calculate whether it hits or miss the planet

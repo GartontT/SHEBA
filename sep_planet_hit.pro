@@ -44,11 +44,11 @@ vel_2hitPlanet = (planet_str.pos_thit.radio) * rot_sun / diff_angle
 while vel_2hitPlanet gt max(vel_wind_au) do begin
    diff_angle = diff_angle + 360
    vel_2hitPlanet = (planet_str.pos_thit.radio) * rot_sun / diff_angle
-
 endwhile
 
-planet_str.sw_thit = vel_2hitPlanet
-
+planet_str.pos_thit.spiral_angle = diff_angle
+planet_str.pos_thit.sw_vel_au = vel_2hitPlanet
+planet_str.pos_thit.sw_vel = vel_2hitPlanet * 150e6 / (24.*60.*60.)
 ;===================================================================
 ;====================== Calculate whether it hits or miss the planet
 planet_str.HitOrMiss = numinrange(vel_2hitPlanet,vel_wind_au)
