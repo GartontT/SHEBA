@@ -66,11 +66,13 @@
 			
 			// slide all content up
 			$(".option").slideUp();
+			$(".option2").slideUp();
 			
 			// slide this content up
 	                var number = $(this).attr("title").split('_');
 			//var content_show = $(this).attr("title");
 	                $("#option_"+number[1]).slideDown();	  
+	                $("#option2_"+number[1]).slideDown();	  
 		});
 	
 	  });
@@ -157,14 +159,55 @@
 	</FORM>
       </div>
       <div id="content_3" class="content"> 
-	<FORM METHOD=POST ACTION="executeSEP.jsp">
-	  <ul>
-	    <li> Start Time <INPUT class="param" TYPE=TEXT NAME=startTime VALUE="2010-01-01T00:00" SIZE=16></li>
-	    <li> Longitude <INPUT class="param" TYPE=TEXT NAME=startPosition VALUE="0" SIZE=3></li>
-	    <li> SW velocity <INPUT class="param" TYPE=TEXT NAME=startSpeed VALUE="400" SIZE=4> &plusmn; <INPUT TYPE=TEXT NAME=errorSpeed VALUE="0" SIZE=4></li>
-	    <li> <INPUT TYPE=SUBMIT value="Run Model"> </li> 
+	  <ul class="bottoms"> <!-- sub menu // bottoms-->
+	    <li><a href="#" title="option_3" class="bottom activo">Sun <font size=+0.5>&rarr;</font> Object</a></li>
+	    <li><a href="#" title="option_4" class="bottom">Sun <font size=+0.5>&larr;</font> Object</a></li>
 	  </ul>
-	</FORM>
+	  <div id="option_3" class="option2">
+	    <FORM METHOD=POST ACTION="executeSEP.jsp">
+	      <ul>
+		<li> Start Time <INPUT class="param" TYPE=TEXT NAME=startTime VALUE="2010-01-01T00:00" SIZE=16></li>
+		<li> Longitude <INPUT class="param" TYPE=TEXT NAME=startPosition VALUE="0" SIZE=3></li>
+		<li> SW velocity <INPUT class="param" TYPE=TEXT NAME=startSpeed VALUE="400" SIZE=4> &plusmn; <INPUT TYPE=TEXT NAME=errorSpeed VALUE="0" SIZE=4></li>
+		<li> Beta <INPUT class="param" TYPE=TEXT NAME=beta VALUE="0.9" SIZE=3></li>
+		<li> <INPUT TYPE=SUBMIT value="Run Model"> </li> 
+	      </ul>
+	    </FORM>
+	  </div>
+	  <div id="option_4" class="option2">
+	    <FORM METHOD=POST ACTION="executeSEPBack.jsp">
+	      <ul>
+		<li> Impact Time <INPUT class="param" TYPE=TEXT NAME=startTime VALUE="2010-01-01T00:00" SIZE=16></li>
+		<li> Object 
+		  <select name="object" size="1">
+		    <option value="Mercury">Mercury</option>
+		    <option value="Venus">Venus</option>
+		    <option selected value="Earth">Earth</option>
+		    <option value="Mars">Mars</option>
+		    <option value="Jupiter">Jupiter</option>
+		    <option value="Saturn">Saturn</option>
+		    <option value="Uranus">Uranus</option>
+		    <option value="Neptune">Neptune</option>
+		    <option value="Pluto">Pluto</option>
+		    <option value="Cassini">Cassini</option>
+		    <option value="Dawn">Dawn</option>
+		    <option value="Galileo">Galileo</option>
+		    <option value="Messenger">Messenger</option>
+		    <option value="NewHorizons">New Horizons</option>
+		    <option value="Rosetta">Rosetta</option>
+		    <option value="StereoA">STEREO A</option>
+		    <option value="StereoB">STEREO B</option>
+		    <option value="Ulysses">Ulysses</option>
+		    <option value="Voyager1">Voyager 1</option>
+		    <option value="Voyager2">Voyager 2</option>
+		  </select>
+		</li>
+		<li> Speed <INPUT class="param" TYPE=TEXT NAME=startSpeed VALUE="400" SIZE=4> &plusmn; <INPUT class="param" TYPE=TEXT NAME=errorSpeed VALUE="0" SIZE=4></li>
+		<li> Beta <INPUT class="param" TYPE=TEXT NAME=beta VALUE="0.9" SIZE=3></li>
+		<li> <INPUT TYPE=SUBMIT value="Run Model"> </li> 
+	      </ul>
+	    </FORM>
+	  </div>
       </div>
     </div> <!-- left box // tabs-->
     <div class="explanation_area"> <!-- right box // sliding content-->
