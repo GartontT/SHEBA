@@ -8,11 +8,16 @@ if ~keyword_set(e_vel) then e_vel=0 ;km/s
 ;===================================================================
 ;====================  Obtain properties of planets and spacecraft if they are not input.
 if data_chk(planets_str,/type) ne 8 then ellip = planet_orbit(t0,3,planet=earth,all_planets=planets_str)
-if data_chk(spacecraft_str,/type) ne 8 then spacecraft_str  = spacecraft_path(t0,drange=1)
+if data_chk(spacecraft_str,/type) ne 8 then spacecraft_str  = spacecraft_path(t0,drange=15)
 
 cir_prop_sp,x0=x0,t0=t0,vel=vel,e_vel=e_vel,planets_str=planets_str,spacecraft_str=spacecraft_str
 
 stop
 ;TO add output
+ploting_prop,planets_str,spacecraft_str,path_out,/plot_cir,model='cir'
+
+writing_prop_out,planets_str,spacecraft_str,path_out,model='cir'
+
+
 
 end

@@ -11,8 +11,8 @@ cir_hit_object,planets_str,st_time=t0,cir_lon=x0,sw_vel=vel,sw_e_vel=e_vel
 
 ;===================================================================
 ;====================  Find if the s/c are hit
-;if data_chk(spacecraft_str,/type) eq 8 then $
-;cir_hit_object,spacecraft_str,st_time=t0,cir_lon=x0,sw_vel=vel,sw_e_vel=e_vel
+if data_chk(spacecraft_str,/type) eq 8 then $
+cir_hit_object,spacecraft_str,st_time=t0,cir_lon=x0,sw_vel=vel,sw_e_vel=e_vel
 
 
 end
