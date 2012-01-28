@@ -1,0 +1,29 @@
+SHEBA
+* Intro
+  SHEBA is a the first propagation model used in HELIO (http://helio-vo.eu), it
+  is a simple balistic propagation which consider three different scenarios
+  and provides expected time ranges of arrival for the different objects (planets
+  and/or spacecraft) and it also offers the posibility to detect when and where
+  and event should be detected whet it has been observed in determined place.
+
+  This document explains what is the model, shows how to use it through the
+  web interface, and finally how the model is implemented (which it is of 
+  great importance to know why behave in certain way sometime).
+
+* How it works.
+  SHEBA is based on a simple 2D(+ time) ballistic model, where it uses constant velocity
+  for blobs that moves uniformaly on a radial direction. However each scenario
+  requieres different approach to get the information wanted.
+** CME
+   The CME are consider as a blob that expands radially at constant velocity.
+   This means 
+** SEP
+
+** CIR
+* How to use it.
+
+* How it is implemented.
+* Charla SHEBA
+  charla de sheba explicando lo que detallo aqui
+**  Charla de HFE => 
+    uso solo, in steps, why do we have a data cart, what we can pass
