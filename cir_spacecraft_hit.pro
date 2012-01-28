@@ -58,6 +58,7 @@ if spacecraft_exist then begin
       spacecraft_str.pos_thit.lat = spacecraft_str.orbit_steps.lat[lab]
       spacecraft_str.pos_thit.orbit_x = spacecraft_str.orbit_steps.dx[lab]
       spacecraft_str.pos_thit.orbit_y = spacecraft_str.orbit_steps.dy[lab]
+      spacecraft_str.HitOrMiss = 1b
 
    endif else begin
 

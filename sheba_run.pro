@@ -4,7 +4,7 @@ pro sheba_back,$
 
   if model eq 'cme' then prop_end_back,object=object,t0=time_impact,_extra=_extra
   if model eq 'sep' then prop_sep_back,object=object,t0=time_impact,_extra=_extra
-
+  if model eq 'cir' then prop_cir_back,object=object,t0=time_impact,_extra=_extra
 end
 ;...//////////////////////////////\\\\\\\\\\\\\\\\\\\\\\\\\\\\\....
 pro sheba_run,model=model,time_sol=time_sol,time_impact=time_impact,_extra=_extra
@@ -18,6 +18,9 @@ pro sheba_run,model=model,time_sol=time_sol,time_impact=time_impact,_extra=_extr
 ;
 ; To run SEP model backward:
 ;sheba_run,model='sep',time_impact='2010-01-01T00:00',object='Mars',vel=400,e_vel=40,beta=0.9,path_out='/tmp/test03/'
+;
+; To run CIR model forward:
+;sheba_run,model='cir',time_sol='2010-01-01T00:00',x0=65,vel=600,e_vel=40,path_out='/tmp/test01/'
 
 
   
@@ -30,14 +33,20 @@ endif else begin
 ;All the models need the coordinates from the planets and spacecraft
 ;===================================================================
 ;====================  Obtain properties of planets and spacecraft
-days_range = (model eq 'sep')?1:300
-ellip = planet_orbit(time_sol,3,planet=earth,all_planets=all_planets)
-all_spacecraft  = spacecraft_path(time_sol,drange=days_range)
+   models = ['cme','sep','cir']
+   dranges = [300,1,15]
+   days_range = dranges[where(model eq models)]
+   ellip = planet_orbit(time_sol,3,planet=earth,all_planets=all_planets)
+   all_spacecraft  = spacecraft_path(time_sol,drange=days_range)
 
 
 
-if model eq 'cme' then prop_end,planets_str=all_planets,spacecraft_str=all_spacecraft,t0=time_sol,_extra=_extra
-if model eq 'sep' then prop_sep,planets_str=all_planets,spacecraft_str=all_spacecraft,t0=time_sol,_extra=_extra
+   if model eq 'cme' then $
+      prop_end,planets_str=all_planets,spacecraft_str=all_spacecraft,t0=time_sol,_extra=_extra
+   if model eq 'sep' then $
+      prop_sep,planets_str=all_planets,spacecraft_str=all_spacecraft,t0=time_sol,_extra=_extra
+   if model eq 'cir' then $
+      prop_cir,planets_str=all_planets,spacecraft_str=all_spacecraft,t0=time_sol,_extra=_extra
 
 endelse
 

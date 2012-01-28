@@ -47,6 +47,7 @@ polrec,planet_t1_rad,planet_t1_lon,orb_x,orb_y,/degrees
       planet_str.pos_thit.lat = planet_t1_lat
       planet_str.pos_thit.orbit_x = orb_x
       planet_str.pos_thit.orbit_y = orb_y
+      planet_str.HitOrMiss = 1b
 
 
 end

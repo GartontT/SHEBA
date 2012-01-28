@@ -12,12 +12,8 @@ if data_chk(spacecraft_str,/type) ne 8 then spacecraft_str  = spacecraft_path(t0
 
 cir_prop_sp,x0=x0,t0=t0,vel=vel,e_vel=e_vel,planets_str=planets_str,spacecraft_str=spacecraft_str
 
-stop
-;TO add output
 ploting_prop,planets_str,spacecraft_str,path_out,/plot_cir,model='cir'
 
 writing_prop_out,planets_str,spacecraft_str,path_out,model='cir'
-
-
 
 end

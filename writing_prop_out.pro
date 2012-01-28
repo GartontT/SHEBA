@@ -5,6 +5,8 @@ str =  ''
      str = "time_start,long_hg,long_hci,long_width,v,v_err,target_obj,r_hci,HitOrMiss,ETA,ETA_min,ETA_max,Dt[days],Dt_min[days],Dt_max[days]"
   if model eq 'sep' then $
      str = "time_start,long_hg,long_hci,v,v_err,beta,target_obj,r_hci,HitOrMiss,v_estimated,ETA,Dt[s]"
+  if model eq 'cir' then $
+     str = "time_start,long_hg,long_hci,v,v_err,target_obj,r_hci,HitOrMiss,ETA,ETA_min,ETA_max,Dt[days],Dt_min[days],Dt_max[days]"
 
 return,str
 end
@@ -26,6 +28,12 @@ str = ''
           string(object[0].input.sw_vel,format='(F7.2)') +','+$
           string(object[0].input.sw_vel_e,format='(F7.2)') +','+$
           string(object[0].input.beta,format='(F4.2)')
+ if model eq 'cir' then $
+    str = object[0].input.st_time + ',' + $
+          string(object[0].input.st_long,format='(F6.2)') +',' + $
+          string(object[0].input.st_long_hci,format='(F6.2)') +',' + $
+          string(object[0].input.sw_vel,format='(F7.2)') +','+$
+          string(object[0].input.sw_vel_e,format='(F7.2)')
 return,str
 end
 
@@ -43,7 +51,7 @@ dt1_out = (t1_out eq '')?'':string((anytim(object.pos_thit.date) - anytim(object
 dt1_out_min = (t1_out eq '')?'':string((anytim(object.minmaxt.t_min) - anytim(object.pos_t0.date))/(3600.*24.),format='(F7.2)')
 dt1_out_max = (t1_out eq '')?'':string((anytim(object.minmaxt.t_max) - anytim(object.pos_t0.date))/(3600.*24.),format='(F7.2)')
  
- if model eq 'cme' then $
+ if (model eq 'cme') or (model eq 'cir') then $
      str = strupcase(object.name) + ',' + $ ; Object
            string(object.pos_t0.radio,format='(F7.3)') +',' +  $ ; distance
            string(object.HitOrMiss,format='(I1)') +',' +  $     ; HitOrMiss
@@ -103,10 +111,10 @@ if model eq 'cme' then begin
           " &plusmn; "+string(object.input.cme_vel_e,format='(F7.2)')+"</div></li>"
 endif
 
-if model eq 'sep' then begin
+if (model eq 'sep') or (model eq 'cir') then begin
    printf,lun,"<li> SolarWind speed <div class='input'>"+string(object.input.sw_vel,format='(F7.2)') + $
           " &plusmn; "+string(object.input.sw_vel_e,format='(F7.2)')+"</div></li>"
-   printf,lun,"<li> Beta <div class='input'>"+string(object.input.beta,format='(F4.2)')+"</div></li>"
+   if (model eq 'sep') then printf,lun,"<li> Beta <div class='input'>"+string(object.input.beta,format='(F4.2)')+"</div></li>"
 endif
 
   printf,lun,"<li> <a href='http://cagnode58.cs.tcd.ie:8080/PropagationModelGUI/'><button type='button'>Reset</button></a></div></li>"
@@ -134,7 +142,7 @@ openw,lun,file,/get_lun
      printf,lun," <ul> <li> Output </li></ul>" 
      printf,lun,"    <table>" 
 
-     if model eq 'cme' then begin
+     if (model eq 'cme') or (model eq 'cir') then begin
         printf,lun,"     <tr> <th> Object </th> <th> ETA min</th> <th> ETA max </th> <th> Dt min(days) </th><th> Dt max(days) </th></tr>"        
         for j=0,n_elements(objects_str)-1 do begin
            a = execute('objects = '+objects_str[j])
