@@ -22,7 +22,7 @@ if data_chk(query_res,/type) ne 8 then goto,end_program
 seconds = anytim(query_res.time)
 closest = min(abs(seconds - anytim(t_object)),lab_closest)
 
-t_object = query_res[lab_closest].time
+t_object = anytim(query_res[lab_closest].time,/CCSDS)
 
 obj_rad = query_res[lab_closest].r_hci
 long_hci= query_res[lab_closest].long_hci

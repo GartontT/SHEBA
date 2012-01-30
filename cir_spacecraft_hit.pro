@@ -15,6 +15,7 @@ if spacecraft_exist then begin
    spacecraft_str.input.cme_vel_e   = 0
    spacecraft_str.input.sw_vel      = sw_vel
    spacecraft_str.input.sw_vel_e    = sw_e_vel
+   spacecraft_str.HitOrMiss         = 1b
 
 ;=================================================================
 ;================= Using same technique that for the planets...
@@ -45,8 +46,8 @@ if spacecraft_exist then begin
          spacecraft_str.pos_thit.delta_time = (anytim(tsun)-anytim(st_time))/60./60./24. ;days
 
       endif
-      if i eq 0 then spacecraft_str.minmaxt.t_max = tsun
-      if i eq 2 then spacecraft_str.minmaxt.t_min = tsun
+      if i eq 0 then spacecraft_str.minmaxt.t_max = anytim(tsun,/CCSDS)
+      if i eq 2 then spacecraft_str.minmaxt.t_min = anytim(tsun,/CCSDS)
 
    endfor
 
@@ -56,8 +57,8 @@ if spacecraft_exist then begin
       spacecraft_str.pos_thit.radio = spacecraft_str.orbit_steps.radio[lab]
       spacecraft_str.pos_thit.lon = spacecraft_str.orbit_steps.lon[lab]
       spacecraft_str.pos_thit.lat = spacecraft_str.orbit_steps.lat[lab]
-      spacecraft_str.pos_thit.orbit_x = spacecraft_str.orbit_steps.dx[lab]
-      spacecraft_str.pos_thit.orbit_y = spacecraft_str.orbit_steps.dy[lab]
+      spacecraft_str.pos_thit.orbit_x = spacecraft_str.orbit_steps.orbit_x[lab]
+      spacecraft_str.pos_thit.orbit_y = spacecraft_str.orbit_steps.orbit_y[lab]
       spacecraft_str.HitOrMiss = 1b
 
    endif else begin

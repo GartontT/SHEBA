@@ -17,7 +17,7 @@ spacecraft_colors=[8,5,3,10,6,4,4,10,5,7,3]
  theta_spiral = theta_sp + sw_lon
  for i=0,n_elements(v_plot)-1 do begin
     polrec,r_plot[i,*],theta_spiral,spir_x,spir_y,/degrees
-    oplot,spir_x,spir_y,color=150 ;,thick=1
+    oplot,spir_x,spir_y,color=150,thick=(keyword_set(cir))?4:1
     if keyword_set(cir) and i eq 1 then oplot,spir_x,spir_y,color=5,thick=4
  endfor
 
