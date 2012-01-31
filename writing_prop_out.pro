@@ -2,11 +2,11 @@ function sheba_header,model=model
 str =  ''
 
   if model eq 'cme' then $
-     str = "time_start,long_hg,long_hci,long_width,v,v_err,target_obj,r_hci,HitOrMiss,ETA,ETA_min,ETA_max,Dt[days],Dt_min[days],Dt_max[days]"
+     str = "time_start,long_hg,long_hci,long_width,v,v_err,target_obj,r_hci,HitOrMiss,ETA,ETA_min,ETA_max,Dt,Dt_min,Dt_max"
   if model eq 'sep' then $
-     str = "time_start,long_hg,long_hci,v,v_err,beta,target_obj,r_hci,HitOrMiss,v_estimated,ETA,Dt[s]"
+     str = "time_start,long_hg,long_hci,v,v_err,beta,target_obj,r_hci,HitOrMiss,v_estimated,ETA,Dt"
   if model eq 'cir' then $
-     str = "time_start,long_hg,long_hci,v,v_err,target_obj,r_hci,HitOrMiss,ETA,ETA_min,ETA_max,Dt[days],Dt_min[days],Dt_max[days]"
+     str = "time_start,long_hg,long_hci,v,v_err,target_obj,r_hci,HitOrMiss,ETA,ETA_min,ETA_max,Dt,Dt_min,Dt_max"
 
 return,str
 end
@@ -68,7 +68,7 @@ dt1_out_max = (t1_out eq '')?'':string((anytim(object.minmaxt.t_max) - anytim(ob
           string(object.pos_t0.radio,format='(F7.3)') +',' +  $ ; distance
           string(object.HitOrMiss,format='(I1)') +',' +  $      ; HitOrMiss
           swvel+',' + $                                         ; velocity stimated
-          object.pos_thit.date +','+$                           ; time of arrival
+          t1_out+','+$                                           ; time of arrival
           dt                                                    ; dt in seconds.
 
 return,str
@@ -94,8 +94,14 @@ object_struct = (data_chk(spacecraft_str,/type) eq 8 )?['planets_str','spacecraf
 close,/all
 
 ;  votable optative (stilts)
-stilts_command = './stilts tcopy '+file_out+'.csv ifmt=csv '+file_out+'.votable ofmt=votable'
-if keyword_set(votable) then spawn,stilts_command
+stilts_command = './stilts tcopy '+file_out+'.csv ifmt=csv '+file_out+'00.votable ofmt=votable'
+stilts_change  = './stilts tpipe cmd=@'+model+'_stilts_script '+file_out+'00.votable ofmt=votable out='+file_out+'.votable'
+if keyword_set(votable) then begin
+   spawn,stilts_command
+   spawn,stilts_change
+   delete_midfiles = 'rm '+file_out+'00.votable'
+   spawn,delete_midfiles
+endif
 
 end
 
