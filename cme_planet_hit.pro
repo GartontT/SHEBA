@@ -43,7 +43,7 @@ planet_str.pos_thit.orbit_y = planet_t1_y
 ;================ Fill in input parameters
 planet_str.input.st_time     = anytim(st_time,/CCSDS)
 planet_str.input.st_long     = long_hgihg(cme_lon,/ihg,date=st_time)
-planet_str.input.st_long_hci = cme_lon
+planet_str.input.st_long_hci = posang(cme_lon)
 planet_str.input.width       = dlong
 planet_str.input.cme_vel     = cme_vel
 planet_str.input.cme_vel_e   = e_vel
