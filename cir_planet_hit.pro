@@ -4,6 +4,15 @@ pro cir_planet_hit,planet_str,st_time=st_time,cir_lon=cir_lon,sw_vel=sw_vel,sw_e
 vel = sw_vel + [-1,0,1]*sw_e_vel
 rot_sun = 14.4
 
+planet_str.input.st_time     = anytim(st_time,/CCSDS)
+planet_str.input.st_long     = cir_lon
+planet_str.input.st_long_hci = long_hgihg(cir_lon,/hg,date=st_time)
+planet_str.input.width       = 0
+planet_str.input.cme_vel     = 0
+planet_str.input.cme_vel_e   = 0
+planet_str.input.sw_vel = sw_vel
+planet_str.input.sw_vel_e = sw_e_vel
+
 for i=0,2 do begin
    time = st_time
    control_ang = 100

@@ -21,7 +21,9 @@ pro sheba_run,model=model,time_sol=time_sol,time_impact=time_impact,_extra=_extr
 ;
 ; To run CIR model forward:
 ;sheba_run,model='cir',time_sol='2010-01-01T00:00',x0=65,vel=600,e_vel=40,path_out='/tmp/test01/'
-
+;
+; To run CIR model backward:
+;sheba_run,model='cir',time_impact='2010-01-01T00:00',object='Mercury',vel=600,e_vel=40,path_out='/tmp/test01/'
 
   
 ; run backwards model to get time_sun for each model if time_impact is provided
@@ -35,9 +37,9 @@ endif else begin
 ;====================  Obtain properties of planets and spacecraft
    models = ['cme','sep','cir']
    dranges = [300,1,15]
-   days_range = dranges[where(model eq models)]
+   days_range =dranges[where(model eq models)]
    ellip = planet_orbit(time_sol,3,planet=earth,all_planets=all_planets)
-   all_spacecraft  = spacecraft_path(time_sol,drange=days_range)
+   all_spacecraft  = spacecraft_path(time_sol,drange=days_range[0])
 
 
 
@@ -50,6 +52,4 @@ endif else begin
 
 endelse
 
-
-stop
 end

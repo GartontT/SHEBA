@@ -1,0 +1,16 @@
+tablename "SHEBA CME propagation model"
+colmeta -desc "Time the CME emerges from the Sun" time_start
+colmeta -desc "Longitude in Heliographic coordinates" -units "degrees" long_hg
+colmeta -desc "HGI Longitude" -units "degrees" long_hci
+colmeta -desc "Longitudinal width of the CME" -units "degrees" long_width
+colmeta -desc "Speed of the CME" -units "km/s" v
+colmeta -desc "Error of the speed" -units "km/s" v_err
+colmeta -desc "Planet or spacecraft of the solar system" target_obj
+colmeta -desc "Radial Distance from the Sun" -units "AU" r_hci
+colmeta -desc "Label that shows whether the object is hit or not" HitOrMiss
+colmeta -desc "Estimated time of arrival" ETA
+colmeta -desc "Minimun Estimated time of arrival" ETA_min
+colmeta -desc "Maximum Estimated time of arrival" ETA_max
+colmeta -desc "Estimated number of days for arrival" -units "Days" Dt
+colmeta -desc "Estimated minimum number of days for arrival" -units "Days" Dt_min
+colmeta -desc "Estimated maximum number of days for arrival" -units "Days" Dt_max

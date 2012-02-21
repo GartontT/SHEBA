@@ -1,0 +1,14 @@
+tablename "SHEBA SEP propagation model"
+colmeta -desc "Time the SEP event happens at the Sun" time_start
+colmeta -desc "Longitude in Heliographic coordinates" -units "degrees" long_hg
+colmeta -desc "HGI Longitude" -units "degrees" long_hci
+colmeta -desc "Speed of the Solar Wind" -units "km/s" v
+colmeta -desc "Error of the speed" -units "km/s" v_err
+colmeta -desc "Fraction of the speed of light" -units "1/c" beta
+colmeta -desc "Planet or spacecraft of the solar system" target_obj
+colmeta -desc "Radial Distance from the Sun" -units "AU" r_hci
+colmeta -desc "Label that shows whether the object is hit or not" HitOrMiss
+colmeta -desc "Velocity of the solarwind that connects the event with the object" -units "km/s" v_estimated
+colmeta -desc "Estimated time of arrival" ETA
+colmeta -desc "Estimated number of seconds for arrival" -units "seconds" Dt
+
