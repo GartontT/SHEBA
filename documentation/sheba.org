@@ -1,29 +1,116 @@
-SHEBA
-* Intro
-  SHEBA is a the first propagation model used in HELIO (http://helio-vo.eu), it
-  is a simple balistic propagation which consider three different scenarios
-  and provides expected time ranges of arrival for the different objects (planets
-  and/or spacecraft) and it also offers the posibility to detect when and where
-  and event should be detected whet it has been observed in determined place.
+Solar-Heliospheric Event Ballistic Algorithm (SHEBA)
+The propagation model used in HELIO
+* Introduction
+  HELIO....the HELiophysics Integrated Observatory
+  (HELIO; http://helio-vo.eu)
+  propagation models complicated, but 
 
-  This document explains what is the model, shows how to use it through the
-  web interface, and finally how the model is implemented (which it is of 
-  great importance to know why behave in certain way sometime).
+  The Solar-Heliospheric Event Ballistic Algorithm (SHEBA) is the first propagation model 
+  used in HELIO. This propagation model is based in a simple ballistic 
+  propagation applied to three different scenarios, providing expected time ranges of 
+  arrival for the different objects (planets and/or spacecraft).  It also allows to 
+  back-propagate, i.e. obtain the starting time and location by giving the object and 
+  the time of impact of the event under study.
+
+  This document explains how this tool works, how to use it through the web
+  interface, and, finally, how the model is implemented.  It is important to know 
+  how the implementation is done, knowing so, the user will have a better understanding
+  of the why certain results are different of expected.
 
 * How it works.
-  SHEBA is based on a simple 2D(+ time) ballistic model, where it uses constant velocity
-  for blobs that moves uniformaly on a radial direction. However each scenario
-  requieres different approach to get the information wanted.
-** CME
-   The CME are consider as a blob that expands radially at constant velocity.
-   This means 
-** SEP
+  SHEBA is based on a simple 3D (radius, longitude and time) ballistic model, where it 
+  uses constant velocity for cells of matter that moves uniformaly on a radial direction. 
+  However, in order to time-delayes serched, each scenario requieres different approach.
 
+  SHEBA is able to model three different events, in both direction (forward and backward).
+  They are coronal mass ejections (CMEs), solar energetic particles (SEP) and co-rotate
+  interaction regions (CIR). Them all use the same principle, i.e. a simple ballistic 
+  propagation model, or also known as Parker's spiral \citep{Parker1956}.
+** Coronal mass ejection
+   SHEBA considers the CMEs as blobs of plasma of infinitesimal radial width, 
+   that expands radially at a constant velocity, i.e. the longitudinal
+   width is kept constant. 
+   SHEBA calculates an estimated time of arrival to each of the objects that
+   are in the way of the CME, with
+ SHEBA will provide a estimated time range of impact to the different objects
+   in the heliosphere.  In order to calculate this the user needs to input 
+   the starting position in the sun, the longitudinal width of the CME, and the
+   speed at which it moves (with an error).  SHEBA then will calculate whether
+   any object is hit and when this would occur.  Notice that dragging and
+   solar wind effects are not taking into account.
+   In the case of back propagation, the object chosen as hit is consider
+   as being in the center of the CME.
+   An example of how to use it is shown in the next section.
+** SEP
+   
 ** CIR
 * How to use it.
+  SHEBA does a simple balistic propagation which relies on what the user chooses.
+  Some of the parameters can be taken from an observed event, others are completely
+  free to the user to select the most appropriate.  Some examples of how to 
+  choose the parameters after an observed event are shown below.
+** CME
+   CMEs are produced from flares, and there is many catalogues that show
+   where and when they occurred.  From these catalogues we can get the first
+   two parameters asked: starting time and longitude (in heliographic coordinates).
+   The other parameters are the speed and the longitudinal width.  We can get
+   some estimation of those from any of the CME catalogues available (LASCO CDAW,
+   CaCTus).  The user must know that those catalogues are made from plane of 
+   the sky observations, thus the speed provided is a projected velocity, but 
+   can be used as a first approximation.
+   Finally, SHEBA needs a width to find the objects hit by the CME.  This width
+   is not provided anywhere, therefore is up to the user to choose one.  Notice
+   that the CME catalogues provide a PA_width. This width refers to the angular 
+   widht of the CME projected on the plane observed.  Though it can be used
+   as a first approximation, it is not the same.
+   This will run the simple ballistic propagation and will provide the time
+   range where the CME is expected to arrive for the different objects (planets
+   and spacecraft) in the heliosphere. Those times intervals can be used then
+   to find whether the CME has been detected by any in-situ instrument.
 
+   The backward propagation finds when and where a CME was originated if it 
+   has produced a direct hit with the planet (or spacecraft). Then the model
+   proceed as before to run with those values as inputs of the forward model.
+   In this case, the user could get the velocity and time of any of the in-situ
+   instruments, this is enough to get the position of where the flare it 
+   happened, however, it also asks for a width to run the forward model as
+   explained before.  So, the user would be able to get, besides the origin, 
+   which other instruments, and when, the CME should be observed.
 * How it is implemented.
+  SHEBA is implemented in IDL, and it relies in some routing of sswidl, and
+  of HELIO package in particular.
+  On the following sections is described how the different routines work.
+** 
 * Charla SHEBA
-  charla de sheba explicando lo que detallo aqui
+ charla de sheba explicando lo que detallo aqui
 **  Charla de HFE => 
     uso solo, in steps, why do we have a data cart, what we can pass
+* for the HFE:
+** CME
+   longitude:  Heliographic longitude in degrees (e.g., the position of a flare)
+   width:      Longitudinal width of the CME in degrees
+   speed:      CME speed in km/s
+   speed error:error in the speed in km/s
+** CME backward
+   width:      Longitudinal width of the CME in degrees ( I would put this one as the last parameter)
+   Object:     This is fine
+   speed:      CME speed in km/s
+   speed error:error in the speed in km/s
+** SW (or better CIR)
+   Longitude:  Heliographic longitude in degrees (e.g., the most-west edge of a Coronal hole)
+   Speed:      The speed of the Solar Wind in km/s
+   speed error:error in the speed of the solar wind in km/s
+** CIR backward 
+   Object:     As in CME
+   Speed:      The speed of the Solar Wind in km/s
+   speed error:error in the speed of the solar wind in km/s
+** SEP
+   Longitude:  Heliographic longitude in degrees (e.g., the position of a flare)
+   Speed:      Speed of the ambient solar wind in km/s
+   speed error:error in the speed of the solar wind in km/s
+   beta:       fraction of lightspeed.
+** SEP backward
+   Object:     As in CME
+   speed:      Speed of the ambient solar wind in km/s
+   speed error:error in the speed of the solar wind in km/s
+   beta:       fraction of lightspeed.
