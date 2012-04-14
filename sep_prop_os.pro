@@ -6,8 +6,8 @@ if ~keyword_set(sw_vel) then sw_vel=400 ;km/s
 time_range=anytim(anytim(t_object)+([-1,1]*(3600*24.)),/CCSDS)
 ;===================================================================
 ;==================== Find object position.
-query = "http://msslxv.mssl.ucl.ac.uk:8080/stilts/task/sqlclient?"+$
-        "db=jdbc:mysql://msslxt.mssl.ucl.ac.uk/helio_ils&"+$
+query = "http://msslkz.mssl.ucl.ac.uk/stilts/task/sqlclient?"+$
+        "db=jdbc:mysql://msslkz.mssl.ucl.ac.uk/helio_ils&"+$
         "user=helio_guest&sql=select target_obj,time,julian_int,"+$
         "r_hci, long_hci, lat_hci, long_carr from trajectories where "+$
         "time between '"+time_range[0]+"' and '"+time_range[1]+$
