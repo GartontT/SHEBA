@@ -213,6 +213,11 @@ if keyword_set(plot_cme) then begin
    cme_t = cme_val[lab_t]
    cme_r = cme_val[lab_r]
    cme_str = {lon:cme_s[0], width:cme_s[1],cme_r:cme_r, cme_t:cme_t}
+
+   ;=== Save CME properties to a file (this may be possible to
+   ;    with final results... (TO Check!)
+   cme2csv, cme_str, planets[0].input.st_time, file_out
+
 endif
 
 plot_prop_part,planets,spacecraft,0,inner_r,$
